@@ -20,8 +20,24 @@ namespace LabOfKiwi.IO
         }
 
         [Fact]
+        public void Test_WriteBoolean()
+        {
+            var stream = new MemoryStream();
+            stream.Write(true);
+            stream.Write(false);
+            byte[] buffer = stream.ToArray();
+            Assert.Equal(2, buffer.Length);
+            Assert.Equal(1, buffer[0]);
+            Assert.Equal(0, buffer[1]);
+        }
+
+        [Fact]
         public void Test_ReadDouble()
             => Test_ReadNumber(new byte[] { 0x40, 0x09, 0x21, 0xFB, 0x54, 0x44, 0x2D, 0x18 }, Math.PI, (s, e) => s.ReadDouble(e));
+
+        [Fact]
+        public void Test_WriteDouble()
+            => Test_WriteNumber(Math.PI, new byte[] { 0x40, 0x09, 0x21, 0xFB, 0x54, 0x44, 0x2D, 0x18 }, (v, s, e) => s.Write(v, e));
 
         [Fact]
         public void Test_ReadFully()
@@ -81,20 +97,48 @@ namespace LabOfKiwi.IO
         }
 
         [Fact]
+        public void Test_WriteInt8()
+        {
+            var stream = new MemoryStream();
+            stream.Write((sbyte)-1);
+            stream.Write((sbyte)127);
+            byte[] buffer = stream.ToArray();
+            Assert.Equal(2, buffer.Length);
+            Assert.Equal(0xFF, buffer[0]);
+            Assert.Equal(0x7F, buffer[1]);
+        }
+
+        [Fact]
         public void Test_ReadInt16()
             => Test_ReadNumber(new byte[] { 0x93, 0xD0 }, (short)-27696, (s, e) => s.ReadInt16(e));
+
+        [Fact]
+        public void Test_WriteInt16()
+            => Test_WriteNumber((short)-27696, new byte[] { 0x93, 0xD0 }, (v, s, e) => s.Write(v, e));
 
         [Fact]
         public void Test_ReadInt32()
             => Test_ReadNumber(new byte[] { 0x93, 0xD0, 0x2A, 0xB7 }, -1815074121, (s, e) => s.ReadInt32(e));
 
         [Fact]
+        public void Test_WriteInt32()
+            => Test_WriteNumber(-1815074121, new byte[] { 0x93, 0xD0, 0x2A, 0xB7 }, (v, s, e) => s.Write(v, e));
+
+        [Fact]
         public void Test_ReadInt64()
             => Test_ReadNumber(new byte[] { 0x93, 0xD0, 0x2A, 0xB7, 0x30, 0x69, 0x6D, 0x64 }, -7795683988698731164L, (s, e) => s.ReadInt64(e));
 
         [Fact]
+        public void Test_WriteInt64()
+            => Test_WriteNumber(-7795683988698731164L, new byte[] { 0x93, 0xD0, 0x2A, 0xB7, 0x30, 0x69, 0x6D, 0x64 }, (v, s, e) => s.Write(v, e));
+
+        [Fact]
         public void Test_ReadSingle()
             => Test_ReadNumber(new byte[] { 0x3E, 0xAA, 0xAA, 0xAB }, 1.0F / 3.0F, (s, e) => s.ReadSingle(e));
+
+        [Fact]
+        public void Test_WriteSingle()
+            => Test_WriteNumber(1.0F / 3.0F, new byte[] { 0x3E, 0xAA, 0xAA, 0xAB }, (v, s, e) => s.Write(v, e));
 
         [Fact]
         public void Test_ReadString()
@@ -147,18 +191,42 @@ namespace LabOfKiwi.IO
         }
 
         [Fact]
+        public void Test_WriteUInt8()
+        {
+            var stream = new MemoryStream();
+            stream.Write((byte)0x45);
+            stream.Write((byte)0xFF);
+            byte[] buffer = stream.ToArray();
+            Assert.Equal(2, buffer.Length);
+            Assert.Equal(0x45, buffer[0]);
+            Assert.Equal(0xFF, buffer[1]);
+        }
+
+        [Fact]
         public void Test_ReadUInt16()
             => Test_ReadNumber(new byte[] { 0x93, 0xD0 }, (ushort)37840, (s, e) => s.ReadUInt16(e));
+
+        [Fact]
+        public void Test_WriteUInt16()
+            => Test_WriteNumber((ushort)37840, new byte[] { 0x93, 0xD0 }, (v, s, e) => s.Write(v, e));
 
         [Fact]
         public void Test_ReadUInt32()
             => Test_ReadNumber(new byte[] { 0x93, 0xD0, 0x2A, 0xB7 }, 2479893175U, (s, e) => s.ReadUInt32(e));
 
         [Fact]
+        public void Test_WriteUInt32()
+            => Test_WriteNumber(2479893175U, new byte[] { 0x93, 0xD0, 0x2A, 0xB7 }, (v, s, e) => s.Write(v, e));
+
+        [Fact]
         public void Test_ReadUInt64()
             => Test_ReadNumber(new byte[] { 0x93, 0xD0, 0x2A, 0xB7, 0x30, 0x69, 0x6D, 0x64 }, 10651060085010820452UL, (s, e) => s.ReadUInt64(e));
 
-        private void Test_ReadNumber<T>(byte[] buffer, T value, Func<MemoryStream, Endianness, T> action)
+        [Fact]
+        public void Test_WriteUInt64()
+            => Test_WriteNumber(10651060085010820452UL, new byte[] { 0x93, 0xD0, 0x2A, 0xB7, 0x30, 0x69, 0x6D, 0x64 }, (v, s, e) => s.Write(v, e));
+
+        private void Test_ReadNumber<T>(byte[] buffer, T value, Func<Stream, Endianness, T> action)
         {
             var stream = ToStream(buffer);
             Assert.Equal(value, action(stream, Endianness.BigEndian));
@@ -169,7 +237,55 @@ namespace LabOfKiwi.IO
             Assert.Throws<ArgumentNullException>(() => action(default, default));
         }
 
+        private void Test_WriteNumber<T>(T value, byte[] expected, Action<T, Stream, Endianness> action)
+        {
+            var stream = new MemoryStream();
+            action(value, stream, Endianness.BigEndian);
+
+            byte[] actual = stream.ToArray();
+            AssertSame(expected, actual);
+
+            Array.Reverse(expected);
+            stream = new MemoryStream();
+            action(value, stream, Endianness.LittleEndian);
+            actual = stream.ToArray();
+            AssertSame(expected, actual);
+        }
+
         private static MemoryStream ToStream(params byte[] buffer)
             => new MemoryStream(buffer);
+
+        private static void AssertSame(byte[] expected, byte[] actual)
+        {
+            Assert.True(AreSame(expected, actual), "Byte arrays are not structurally identical.");
+        }
+
+        private static bool AreSame(byte[] arr1, byte[] arr2)
+        {
+            if (arr1 == arr2)
+            {
+                return true;
+            }
+            
+            if (arr1 == null || arr2 == null)
+            {
+                return false;
+            }
+
+            if (arr1.Length != arr2.Length)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < arr1.Length; i++)
+            {
+                if (arr1[0] != arr2[0])
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
     }
 }
