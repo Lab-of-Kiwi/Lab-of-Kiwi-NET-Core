@@ -16,9 +16,9 @@ namespace LabOfKiwi.IO
         /// <returns><c>true</c> if the read byte is not 0; otherwise, <c>false</c>.</returns>
         /// 
         /// <exception cref="ArgumentNullException"><paramref name="stream"/> is <c>null</c>.</exception>
-        /// <exception cref="NotSupportedException"><paramref name="stream"/> does not support reading.</exception>
-        /// <exception cref="ObjectDisposedException">Methods were called after <paramref name="stream"/> was closed.</exception>
-        /// <exception cref="EndOfStreamException">The end of <paramref name="stream"/> has been reached.</exception>
+        /// <exception cref="NotSupportedException"/>
+        /// <exception cref="ObjectDisposedException"/>
+        /// <exception cref="EndOfStreamException"/>The end of <paramref name="stream"/> has been reached.</exception>
         public static bool ReadBoolean(this Stream stream)
         {
             if (stream == null)
@@ -92,11 +92,11 @@ namespace LabOfKiwi.IO
         /// <param name="count">The maximum number of bytes to be read from the <paramref name="stream"/>.</param>
         /// 
         /// <exception cref="ArgumentNullException"><paramref name="stream"/> or <paramref name="buffer"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">The sum of <paramref name="offset"/> and <paramref name="count"/> is larger than the buffer length.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="offset"/> or <paramref name="count"/> is negative.</exception>
-        /// <exception cref="IOException">An I/O error occurs.</exception>
-        /// <exception cref="NotSupportedException"><paramref name="stream"/> does not support reading.</exception>
-        /// <exception cref="ObjectDisposedException">Methods were called after <paramref name="stream"/> was closed.</exception>
+        /// <exception cref="ArgumentException"/>
+        /// <exception cref="ArgumentOutOfRangeException"/>
+        /// <exception cref="IOException"/>
+        /// <exception cref="NotSupportedException"/>
+        /// <exception cref="ObjectDisposedException"/>
         /// <exception cref="EndOfStreamException">The end of <paramref name="stream"/> has been reached.</exception>
         public static void ReadFully(this Stream stream, byte[] buffer, int offset, int count)
         {
@@ -120,8 +120,8 @@ namespace LabOfKiwi.IO
         /// <returns>A <see cref="sbyte"/> value.</returns>
         /// 
         /// <exception cref="ArgumentNullException"><paramref name="stream"/> is <c>null</c>.</exception>
-        /// <exception cref="NotSupportedException"><paramref name="stream"/> does not support reading.</exception>
-        /// <exception cref="ObjectDisposedException">Methods were called after <paramref name="stream"/> was closed.</exception>
+        /// <exception cref="NotSupportedException"/>
+        /// <exception cref="ObjectDisposedException"/>
         /// <exception cref="EndOfStreamException">The end of <paramref name="stream"/> has been reached.</exception>
         public static sbyte ReadInt8(this Stream stream)
         {
@@ -251,10 +251,11 @@ namespace LabOfKiwi.IO
         /// <returns>A <see cref="string"/> value.</returns>
         /// 
         /// <exception cref="ArgumentNullException"><paramref name="stream"/> is <c>null</c>.</exception>
-        /// <exception cref="NotSupportedException"><paramref name="stream"/> does not support reading.</exception>
-        /// <exception cref="ObjectDisposedException">Methods were called after <paramref name="stream"/> was closed.</exception>
+        /// <exception cref="NotSupportedException"/>
+        /// <exception cref="ObjectDisposedException"/>
         /// <exception cref="EndOfStreamException">The end of <paramref name="stream"/> has been reached.</exception>
-        /// <exception cref="IOException">Unable to decode bytes read as a <see cref="string"/> using <paramref name="encoding"/>.</exception>
+        /// <exception cref="ArgumentException"/>
+        /// <exception cref="DecoderFallbackException"/>
         public static string ReadString(this Stream stream, Encoding? encoding = null)
         {
             if (stream == null)
@@ -285,14 +286,7 @@ namespace LabOfKiwi.IO
                 }
             }
 
-            try
-            {
-                return encoding.GetString(bytes.ToArray());
-            }
-            catch (Exception e)
-            {
-                throw new IOException("Unable to decode stream bytes as a string using " + encoding + ".", e);
-            }
+            return encoding.GetString(bytes.ToArray());
         }
 
         /// <summary>
@@ -303,8 +297,8 @@ namespace LabOfKiwi.IO
         /// <returns>A <see cref="byte"/> value.</returns>
         /// 
         /// <exception cref="ArgumentNullException"><paramref name="stream"/> is <c>null</c>.</exception>
-        /// <exception cref="NotSupportedException"><paramref name="stream"/> does not support reading.</exception>
-        /// <exception cref="ObjectDisposedException">Methods were called after <paramref name="stream"/> was closed.</exception>
+        /// <exception cref="NotSupportedException"/>
+        /// <exception cref="ObjectDisposedException"/>
         /// <exception cref="EndOfStreamException">The end of <paramref name="stream"/> has been reached.</exception>
         public static byte ReadUInt8(this Stream stream)
         {
