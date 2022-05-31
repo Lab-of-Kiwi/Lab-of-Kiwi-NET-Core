@@ -6,7 +6,7 @@ namespace LabOfKiwi
     /// <summary>
     /// Extension methods for arrays.
     /// </summary>
-    public static class ArrayExtensions
+    public static partial class ArrayExtensions
     {
         /// <summary>
         /// Returns a new array that center-aligns the elements in the provided array by padding them on the left and

@@ -3,7 +3,7 @@ using Xunit;
 
 namespace LabOfKiwi
 {
-    public class ArrayExtensionsTests
+    public partial class ArrayExtensionsTests
     {
         [Fact]
         public void Test_PadLeft()
