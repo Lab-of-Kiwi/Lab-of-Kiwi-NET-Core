@@ -30,6 +30,6 @@ namespace LabOfKiwi.IO
         /// 
         /// <exception cref="ArgumentNullException"><paramref name="stream"/> is <c>null</c>.</exception>
         /// <exception cref="IOException">An error occurs when writing to <paramref name="stream"/>.</exception>
-        ValueTask WriteAsync(Stream stream, CancellationToken cancellationToken = default);
+        Task WriteAsync(Stream stream, CancellationToken cancellationToken = default);
     }
 }

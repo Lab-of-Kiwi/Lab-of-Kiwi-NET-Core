@@ -33,6 +33,6 @@ namespace LabOfKiwi.IO
         /// <exception cref="IOException">An error occurs when reading <paramref name="stream"/>.</exception>
         /// <exception cref="EndOfStreamException">The end of <paramref name="stream"/> has been reached.</exception>
         /// <exception cref="StreamReadTaskCanceledException">Task is cancelled before all bytes are read.</exception>
-        ValueTask ReadAsync(Stream stream, CancellationToken cancellationToken = default);
+        Task ReadAsync(Stream stream, CancellationToken cancellationToken = default);
     }
 }
