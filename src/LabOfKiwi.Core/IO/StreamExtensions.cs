@@ -11,7 +11,8 @@ namespace LabOfKiwi.IO;
 public static partial class StreamExtensions
 {
     // The endianness of this system's architecture.
-    private static readonly Endianness Endianness = BitConverter.IsLittleEndian ? Endianness.LittleEndian : Endianness.BigEndian;
+    private static readonly Endianness Endianness = BitConverter.IsLittleEndian
+        ? Endianness.LittleEndian : Endianness.BigEndian;
 
     // Internal method for reading fully into the provided buffer.
     private static void InternalReadFully(Stream stream, Span<byte> buffer)
@@ -23,7 +24,8 @@ public static partial class StreamExtensions
     }
 
     // Internal async method for reading fully into the provided buffer.
-    private static async Task InternalReadFullyAsync(Stream stream, Memory<byte> buffer, CancellationToken cancellationToken)
+    private static async Task InternalReadFullyAsync(Stream stream, Memory<byte> buffer,
+        CancellationToken cancellationToken)
     {
         int bytesRead = await stream.ReadAsync(buffer, cancellationToken);
 

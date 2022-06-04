@@ -9,28 +9,28 @@ namespace LabOfKiwi;
 public static partial class ArrayExtensions
 {
     /// <summary>
-    /// Returns a new array that center-aligns the elements in the provided array by padding them on the left and
-    /// right with a specified value, for a specified total length.
+    /// Returns a new array that center-aligns the elements in the provided array by padding them on the left and right
+    /// with a specified value, for a specified total length.
     /// </summary>
     /// 
     /// <typeparam name="T">The type of elements in <paramref name="array"/>.</typeparam>
     /// <param name="array">The array to be padded.</param>
     /// <param name="totalWidth">
-    ///     The number of elements in the resulting array, equal to the number of original elements plus any
-    ///     additional padding elements.
+    ///     The number of elements in the resulting array, equal to the number of original elements plus any additional
+    ///     padding elements.
     /// </param>
     /// <param name="paddingValue">A padding value.</param>
     /// <param name="preferLeftPadding">
-    ///     Flag to determine which side to prefer padding if <paramref name="array"/> is unable to be centered
-    ///     exactly. Default is left-aligned by padding on the right.
+    ///     Flag to determine which side to prefer padding if <paramref name="array"/> is unable to be centered exactly.
+    ///     Default is left-aligned by padding on the right.
     /// </param>
     /// <returns>
-    ///     A new array equivalent to <paramref name="array"/>, but center-aligned and padded on the left and right
-    ///     with as many <paramref name="paddingValue"/> elements as needed to create a length of
+    ///     A new array equivalent to <paramref name="array"/>, but center-aligned and padded on the left and right with
+    ///     as many <paramref name="paddingValue"/> elements as needed to create a length of
     ///     <paramref name="totalWidth"/>. However, if <paramref name="totalWidth"/> is less than the length of
     ///     <paramref name="array"/>, the method returns a reference to <paramref name="array"/>. If
-    ///     <paramref name="totalWidth"/> is equal to the length of <paramref name="array"/>, the method returns a
-    ///     copy of <paramref name="array"/>.
+    ///     <paramref name="totalWidth"/> is equal to the length of <paramref name="array"/>, the method returns a copy
+    ///     of <paramref name="array"/>.
     /// </returns>
     /// 
     /// <exception cref="ArgumentNullException"><paramref name="array"/> is <c>null</c>.</exception>
@@ -98,17 +98,16 @@ public static partial class ArrayExtensions
     /// <typeparam name="T">The type of elements in <paramref name="array"/>.</typeparam>
     /// <param name="array">The array to be padded.</param>
     /// <param name="totalWidth">
-    ///     The number of elements in the resulting array, equal to the number of original elements plus any
-    ///     additional padding elements.
+    ///     The number of elements in the resulting array, equal to the number of original elements plus any additional
+    ///     padding elements.
     /// </param>
     /// <param name="paddingValue">A padding value.</param>
     /// <returns>
-    ///     A new array equivalent to <paramref name="array"/>, but right-aligned and padded on the left with as
-    ///     many <paramref name="paddingValue"/> elements as needed to create a length of
-    ///     <paramref name="totalWidth"/>. However, if <paramref name="totalWidth"/> is less than the length of
-    ///     <paramref name="array"/>, the method returns a reference to <paramref name="array"/>. If
-    ///     <paramref name="totalWidth"/> is equal to the length of <paramref name="array"/>, the method returns a
-    ///     copy of <paramref name="array"/>.
+    ///     A new array equivalent to <paramref name="array"/>, but right-aligned and padded on the left with as many
+    ///     <paramref name="paddingValue"/> elements as needed to create a length of <paramref name="totalWidth"/>.
+    ///     However, if <paramref name="totalWidth"/> is less than the length of <paramref name="array"/>, the method
+    ///     returns a reference to <paramref name="array"/>. If <paramref name="totalWidth"/> is equal to the length of
+    ///     <paramref name="array"/>, the method returns a copy of <paramref name="array"/>.
     /// </returns>
     /// 
     /// <exception cref="ArgumentNullException"><paramref name="array"/> is <c>null</c>.</exception>
@@ -156,17 +155,16 @@ public static partial class ArrayExtensions
     /// <typeparam name="T">The type of elements in <paramref name="array"/>.</typeparam>
     /// <param name="array">The array to be padded.</param>
     /// <param name="totalWidth">
-    ///     The number of elements in the resulting array, equal to the number of original elements plus any
-    ///     additional padding elements.
+    ///     The number of elements in the resulting array, equal to the number of original elements plus any additional
+    ///     padding elements.
     /// </param>
     /// <param name="paddingValue">A padding value.</param>
     /// <returns>
-    ///     A new array equivalent to <paramref name="array"/>, but left-aligned and padded on the right with as
-    ///     many <paramref name="paddingValue"/> elements as needed to create a length of
-    ///     <paramref name="totalWidth"/>. However, if <paramref name="totalWidth"/> is less than the length of
-    ///     <paramref name="array"/>, the method returns a reference to <paramref name="array"/>. If
-    ///     <paramref name="totalWidth"/> is equal to the length of <paramref name="array"/>, the method returns a
-    ///     copy of <paramref name="array"/>.
+    ///     A new array equivalent to <paramref name="array"/>, but left-aligned and padded on the right with as many
+    ///     <paramref name="paddingValue"/> elements as needed to create a length of <paramref name="totalWidth"/>.
+    ///     However, if <paramref name="totalWidth"/> is less than the length of <paramref name="array"/>, the method
+    ///     returns a reference to <paramref name="array"/>. If <paramref name="totalWidth"/> is equal to the length of
+    ///     <paramref name="array"/>, the method returns a copy of <paramref name="array"/>.
     /// </returns>
     /// 
     /// <exception cref="ArgumentNullException"><paramref name="array"/> is <c>null</c>.</exception>

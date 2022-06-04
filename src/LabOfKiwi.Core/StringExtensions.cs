@@ -9,8 +9,8 @@ namespace LabOfKiwi;
 public static class StringExtensions
 {
     /// <summary>
-    /// Returns a new string that center-aligns the characters in the provided string by padding them on the left
-    /// and right with a specified Unicode character, for a specified total length.
+    /// Returns a new string that center-aligns the characters in the provided string by padding them on the left and
+    /// right with a specified Unicode character, for a specified total length.
     /// </summary>
     /// 
     /// <param name="value">The string to be padded.</param>
@@ -20,16 +20,16 @@ public static class StringExtensions
     /// </param>
     /// <param name="paddingChar">A Unicode padding character.</param>
     /// <param name="preferLeftPadding">
-    ///     Flag to determine which side to prefer padding if <paramref name="value"/> is unable to be centered
-    ///     exactly. Default is left-aligned by padding on the right.
+    ///     Flag to determine which side to prefer padding if <paramref name="value"/> is unable to be centered exactly.
+    ///     Default is left-aligned by padding on the right.
     /// </param>
     /// <returns>
     ///     A new string equivalent to <paramref name="value"/>, but center-aligned and padded on the left and right
     ///     with as many <paramref name="paddingChar"/> characters as needed to create a length of
     ///     <paramref name="totalWidth"/>. However, if <paramref name="totalWidth"/> is less than the length of
     ///     <paramref name="value"/>, the method returns a reference to <paramref name="value"/>. If
-    ///     <paramref name="totalWidth"/> is equal to the length of <paramref name="value"/>, the method returns a
-    ///     new string that is identical to <paramref name="value"/>.
+    ///     <paramref name="totalWidth"/> is equal to the length of <paramref name="value"/>, the method returns a new
+    ///     string that is identical to <paramref name="value"/>.
     /// </returns>
     /// 
     /// <exception cref="ArgumentNullException"><paramref name="value"/> is <c>null</c>.</exception>

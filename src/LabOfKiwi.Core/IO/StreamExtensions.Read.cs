@@ -8,8 +8,8 @@ namespace LabOfKiwi.IO;
 public static partial class StreamExtensions
 {
     /// <summary>
-    /// Reads the next byte in the provided <see cref="Stream"/> instance and returns a <see cref="bool"/> value
-    /// based on if the read byte is non-zero.
+    /// Reads the next byte in the provided <see cref="Stream"/> instance and returns a <see cref="bool"/> value based
+    /// on if the read byte is non-zero.
     /// </summary>
     /// 
     /// <param name="stream">The <see cref="Stream"/> instance to read.</param>
@@ -67,7 +67,9 @@ public static partial class StreamExtensions
     /// </summary>
     /// 
     /// <param name="stream">The <see cref="Stream"/> instance to read.</param>
-    /// <param name="buffer">A region of memory whose values are replaced by the bytes read from <paramref name="stream"/>.</param>
+    /// <param name="buffer">
+    ///     A region of memory whose values are replaced by the bytes read from <paramref name="stream"/>.
+    /// </param>
     /// 
     /// <exception cref="ArgumentNullException"><paramref name="stream"/> is <c>null</c>.</exception>
     /// <exception cref="EndOfStreamException">The end of <paramref name="stream"/> has been reached.</exception>
@@ -87,11 +89,19 @@ public static partial class StreamExtensions
     /// </summary>
     /// 
     /// <param name="stream">The <see cref="Stream"/> instance to read.</param>
-    /// <param name="buffer">An array of bytes whose values between <paramref name="offset"/> and (<paramref name="offset"/> + <paramref name="count"/> - 1) are replaced by the bytes read from <paramref name="stream"/>.</param>
-    /// <param name="offset">The zero-based byte offset in <paramref name="buffer"/> at which to begin storing the data read from <paramref name="stream"/>.</param>
+    /// <param name="buffer">
+    ///     An array of bytes whose values between <paramref name="offset"/> and (<paramref name="offset"/> +
+    ///     <paramref name="count"/> - 1) are replaced by the bytes read from <paramref name="stream"/>.
+    /// </param>
+    /// <param name="offset">
+    ///     The zero-based byte offset in <paramref name="buffer"/> at which to begin storing the data read from
+    ///     <paramref name="stream"/>.
+    /// </param>
     /// <param name="count">The maximum number of bytes to be read from the <paramref name="stream"/>.</param>
     /// 
-    /// <exception cref="ArgumentNullException"><paramref name="stream"/> or <paramref name="buffer"/> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentNullException">
+    ///     <paramref name="stream"/> or <paramref name="buffer"/> is <c>null</c>.
+    /// </exception>
     /// <exception cref="ArgumentException"/>
     /// <exception cref="ArgumentOutOfRangeException"/>
     /// <exception cref="IOException"/>
@@ -141,8 +151,8 @@ public static partial class StreamExtensions
     }
 
     /// <summary>
-    /// Reads the next two bytes in the provided <see cref="Stream"/> instance and returns a <see cref="short"/>
-    /// value based on those bytes.
+    /// Reads the next two bytes in the provided <see cref="Stream"/> instance and returns a <see cref="short"/> value
+    /// based on those bytes.
     /// </summary>
     /// 
     /// <param name="stream">The <see cref="Stream"/> instance to read.</param>
@@ -166,8 +176,8 @@ public static partial class StreamExtensions
     }
 
     /// <summary>
-    /// Reads the next four bytes in the provided <see cref="Stream"/> instance and returns an <see cref="int"/>
-    /// value based on those bytes.
+    /// Reads the next four bytes in the provided <see cref="Stream"/> instance and returns an <see cref="int"/> value
+    /// based on those bytes.
     /// </summary>
     /// 
     /// <param name="stream">The <see cref="Stream"/> instance to read.</param>
@@ -191,8 +201,8 @@ public static partial class StreamExtensions
     }
 
     /// <summary>
-    /// Reads the next eight bytes in the provided <see cref="Stream"/> instance and returns a <see cref="long"/>
-    /// value based on those bytes.
+    /// Reads the next eight bytes in the provided <see cref="Stream"/> instance and returns a <see cref="long"/> value
+    /// based on those bytes.
     /// </summary>
     /// 
     /// <param name="stream">The <see cref="Stream"/> instance to read.</param>
@@ -216,8 +226,8 @@ public static partial class StreamExtensions
     }
 
     /// <summary>
-    /// Reads the next four bytes in the provided <see cref="Stream"/> instance and returns a <see cref="float"/>
-    /// value based on those bytes.
+    /// Reads the next four bytes in the provided <see cref="Stream"/> instance and returns a <see cref="float"/> value
+    /// based on those bytes.
     /// </summary>
     /// 
     /// <param name="stream">The <see cref="Stream"/> instance to read.</param>
@@ -242,12 +252,15 @@ public static partial class StreamExtensions
 
     /// <summary>
     /// Reads the bytes in the provided <see cref="Stream"/> instance until a 0 byte is found (NULL character), then
-    /// takes the bytes read (excluding the NULL terminator) and returns a <see cref="string"/> using the
-    /// provided <see cref="Encoding"/>.
+    /// takes the bytes read (excluding the NULL terminator) and returns a <see cref="string"/> using the provided
+    /// <see cref="Encoding"/>.
     /// </summary>
     /// 
     /// <param name="stream">The <see cref="Stream"/> instance to read.</param>
-    /// <param name="encoding">The <see cref="Encoding"/> to use for creating the <see cref="string"/>; if <c>null</c> is provided, <see cref="Encoding.UTF8"/> is used.</param>
+    /// <param name="encoding">
+    ///     The <see cref="Encoding"/> to use for creating the <see cref="string"/>; if <c>null</c> is provided,
+    ///     <see cref="Encoding.UTF8"/> is used.
+    /// </param>
     /// <returns>A <see cref="string"/> value.</returns>
     /// 
     /// <exception cref="ArgumentNullException"><paramref name="stream"/> is <c>null</c>.</exception>
@@ -318,8 +331,8 @@ public static partial class StreamExtensions
     }
 
     /// <summary>
-    /// Reads the next two bytes in the provided <see cref="Stream"/> instance and returns an <see cref="ushort"/>
-    /// value based on those bytes.
+    /// Reads the next two bytes in the provided <see cref="Stream"/> instance and returns an <see cref="ushort"/> value
+    /// based on those bytes.
     /// </summary>
     /// 
     /// <param name="stream">The <see cref="Stream"/> instance to read.</param>
@@ -343,8 +356,8 @@ public static partial class StreamExtensions
     }
 
     /// <summary>
-    /// Reads the next four bytes in the provided <see cref="Stream"/> instance and returns an <see cref="uint"/>
-    /// value based on those bytes.
+    /// Reads the next four bytes in the provided <see cref="Stream"/> instance and returns an <see cref="uint"/> value
+    /// based on those bytes.
     /// </summary>
     /// 
     /// <param name="stream">The <see cref="Stream"/> instance to read.</param>

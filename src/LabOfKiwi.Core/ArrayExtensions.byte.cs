@@ -89,8 +89,8 @@ public static partial class ArrayExtensions
     }
 
     /// <summary>
-    /// Returns a hexadecimal string representation of the provided byte array, formatted based on the remaining
-    /// method parameters.
+    /// Returns a hexadecimal string representation of the provided byte array, formatted based on the remaining method
+    /// parameters.
     /// </summary>
     /// 
     /// <param name="array">The byte array to read as a hexadecimal string.</param>

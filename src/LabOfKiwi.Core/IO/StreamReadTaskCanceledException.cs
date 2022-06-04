@@ -9,9 +9,10 @@ namespace LabOfKiwi.IO;
 public class StreamReadTaskCanceledException : TaskCanceledException
 {
     /// <summary>
-    /// Constructs a new <see cref="StreamReadTaskCanceledException"/> instace with
-    /// the provided number of bytes read and the cancellation token that caused the exception.
+    /// Constructs a new <see cref="StreamReadTaskCanceledException"/> instace with the provided number of bytes read
+    /// and the cancellation token that caused the exception.
     /// </summary>
+    /// 
     /// <param name="bytesRead">The number of bytes read before being cancelled.</param>
     /// <param name="token">The token that cancelled the task.</param>
 

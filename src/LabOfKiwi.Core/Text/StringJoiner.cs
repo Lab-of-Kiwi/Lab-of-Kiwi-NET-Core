@@ -16,8 +16,7 @@ public sealed class StringJoiner
     private string _emptyValue;
 
     /// <summary>
-    /// Constructs a <see cref="StringJoiner"/> instance using the provided delimiter, and optional prefix and
-    /// suffix.
+    /// Constructs a <see cref="StringJoiner"/> instance using the provided delimiter, and optional prefix and suffix.
     /// </summary>
     /// 
     /// <param name="delimiter">The text to be used between each element added.</param>
@@ -53,8 +52,8 @@ public sealed class StringJoiner
     }
 
     /// <summary>
-    /// Adds the text of the provided <see cref="StringJoiner"/> instance with its delimiter separating its elements
-    /// as the next element of this instance. If <paramref name="other"/> is empty, nothing happens.
+    /// Adds the text of the provided <see cref="StringJoiner"/> instance with its delimiter separating its elements as
+    /// the next element of this instance. If <paramref name="other"/> is empty, nothing happens.
     /// </summary>
     /// 
     /// <param name="other">The <see cref="StringJoiner"/> whose text is added to this instance.</param>
@@ -95,6 +94,7 @@ public sealed class StringJoiner
     /// <summary>
     /// Returns the text representation of this instance.
     /// </summary>
+    /// 
     /// <returns>The <see cref="string"/> representation of this instance.</returns>
     public override string ToString()
     {

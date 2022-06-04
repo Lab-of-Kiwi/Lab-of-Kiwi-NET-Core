@@ -201,14 +201,17 @@ public static partial class StreamExtensions
     /// <param name="stream">The <see cref="Stream"/> to write to.</param>
     /// <param name="value">The <see cref="string"/> value to write.</param>
     /// <param name="encoding">The <see cref="Encoding"/> to use. Default is <see cref="Encoding.UTF8"/></param>
-    /// <param name="isNullTerminated">Tells that a 0 (NULL) character byte should be written after <paramref name="value"/>.</param>
+    /// <param name="isNullTerminated">
+    ///     Tells that a 0 (NULL) character byte should be written after <paramref name="value"/>.
+    /// </param>
     /// 
     /// <exception cref="ArgumentNullException"><paramref name="stream"/>is <c>null</c>.</exception>
     /// <exception cref="EncoderFallbackException"/>
     /// <exception cref="IOException"/>
     /// <exception cref="NotSupportedException"/>
     /// <exception cref="ObjectDisposedException"/>
-    public static void Write(this Stream stream, string? value, Encoding? encoding = null, bool isNullTerminated = false)
+    public static void Write(this Stream stream, string? value, Encoding? encoding = null,
+        bool isNullTerminated = false)
     {
         if (stream == null)
         {
