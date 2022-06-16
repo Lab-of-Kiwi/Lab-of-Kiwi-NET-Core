@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace LabOfKiwi;
 
@@ -37,15 +39,8 @@ public static class StringExtensions
     public static string PadCenter(this string value, int totalWidth, char paddingChar = ' ',
         bool preferLeftPadding = false)
     {
-        if (value == null)
-        {
-            throw new ArgumentNullException(nameof(value));
-        }
-
-        if (totalWidth < 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(totalWidth));
-        }
+        ThrowHelper.NullCheck(nameof(value), value);
+        ThrowHelper.RangeCheck(nameof(totalWidth), totalWidth, minValue: 0);
 
         if (value.Length > totalWidth)
         {
@@ -58,5 +53,95 @@ public static class StringExtensions
         Debug.Assert(!ReferenceEquals(chars, result));
 
         return new string(result);
+    }
+
+    public static string RemoveMiddleChar(this string value)
+    {
+        ThrowHelper.NullCheck(nameof(value), value);
+
+        if (value.Length == 0)
+        {
+            return string.Empty;
+        }
+
+        int middle = value.Length / 2;
+
+        return value[0..middle] + value[(middle + 1)..];
+    }
+
+    public static string RemoveMiddleCharsUnti(this string value, int targetLength)
+    {
+        ThrowHelper.NullCheck(nameof(value), value);
+        ThrowHelper.RangeCheck(nameof(targetLength), targetLength, minValue: 0);
+
+        if (targetLength == 0)
+        {
+            return string.Empty;
+        }
+
+        while (value.Length > targetLength)
+        {
+            int middle = value.Length / 2;
+            value = value[0..middle] + value[(middle + 1)..];
+        }
+
+        return value;
+    }
+
+    public static string[] ToWords(this string value)
+    {
+        ThrowHelper.NullCheck(nameof(value), value);
+
+        if (string.IsNullOrEmpty(value))
+        {
+            return Array.Empty<string>();
+        }
+
+        value = value.ReplaceLineEndings("\n");
+
+        List<string> words = new();
+
+        ReadOnlySpan<char> chars = value.ToCharArray();
+
+        while (chars.Length > 0)
+        {
+            for (int i = 0; i < chars.Length; i++)
+            {
+                char c = chars[i];
+
+                if (char.IsWhiteSpace(c) || char.IsControl(c))
+                {
+                    if (i > 0)
+                    {
+                        words.Add(new string(chars[0..i]));
+                    }
+
+                    if (c == '\n')
+                    {
+                        words.Add("\n");
+                    }
+                    else if (c == '\t')
+                    {
+                        words.Add("\t");
+                    }
+
+                    chars = chars[(i + 1)..];
+                    break;
+                }
+
+                if (i == chars.Length - 1)
+                {
+                    if (i > 0)
+                    {
+                        words.Add(new string(chars));
+                    }
+
+                    chars = default;
+                    break;
+                }
+            }
+        }
+
+        return words.ToArray();
     }
 }
