@@ -48,16 +48,24 @@ public sealed class Text : Element
         return this;
     }
 
-    public override string ToString()
+    public override string ToFormattedString(int tabCount, HtmlFormatOptions formatOptions)
     {
+        if (tabCount < 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(tabCount));
+        }
+
         StringBuilder sb = new();
 
+        sb.Append(formatOptions.GetTab(tabCount));
         sb.Append(HttpUtility.HtmlEncode(_text));
 
         foreach (var e in _nextElements)
         {
             sb.Append(e.ToString());
         }
+
+        sb.Append(formatOptions.GetNewLine());
 
         return sb.ToString();
     }

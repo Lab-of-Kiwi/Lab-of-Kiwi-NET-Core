@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -28,6 +29,8 @@ public abstract class ContainerTag<TElement> : Tag, IContainerElement<TElement>
                 throw new ArgumentNullException(nameof(value));
             }
 
+            ThrowIfInvalid(value);
+
             value.Parent = this;
             _elements[index] = value;
         }
@@ -43,6 +46,8 @@ public abstract class ContainerTag<TElement> : Tag, IContainerElement<TElement>
         {
             throw new ArgumentNullException(nameof(item));
         }
+
+        ThrowIfInvalid(item);
 
         item.Parent = this;
         _elements.Add(item);
@@ -96,6 +101,8 @@ public abstract class ContainerTag<TElement> : Tag, IContainerElement<TElement>
             throw new ArgumentNullException(nameof(item));
         }
 
+        ThrowIfInvalid(item);
+
         item.Parent = this;
         _elements.Insert(index, item);
     }
@@ -127,12 +134,27 @@ public abstract class ContainerTag<TElement> : Tag, IContainerElement<TElement>
     #region Internal Members
     protected abstract bool RequiresClosingTag { get; }
 
-    internal sealed override void CompleteToString(StringBuilder sb)
+    protected virtual bool IsValid(TElement child)
+    {
+        return true;
+    }
+
+    private void ThrowIfInvalid(TElement child)
+    {
+        if (!IsValid(child))
+        {
+            throw new ArgumentException("Child element is not valid for this tag.");
+        }
+    }
+
+    internal override void CompleteToString(StringBuilder sb, int tabCount, HtmlFormatOptions formatOptions)
     {
         if (_elements.Count == 0)
         {
             if (RequiresClosingTag)
-                sb.Append("></").Append(TagName).Append('>');
+            {
+                sb.Append($"></{TagName}>");
+            }
             else
             {
                 sb.Append(" />");
@@ -141,13 +163,16 @@ public abstract class ContainerTag<TElement> : Tag, IContainerElement<TElement>
         else
         {
             sb.Append('>');
+            sb.Append(formatOptions.GetNewLine());
 
             foreach (var element in _elements)
             {
-                sb.Append(element?.ToString() ?? string.Empty);
+                sb.Append(element.ToFormattedString(tabCount + 1, formatOptions));
+                Debug.Assert(formatOptions != HtmlFormatOptions.None || sb[^1] == '\n');
             }
 
-            sb.Append("</").Append(TagName).Append('>');
+            sb.Append(formatOptions.GetTab(tabCount));
+            sb.Append($"</{TagName}>");
         }
     }
     #endregion

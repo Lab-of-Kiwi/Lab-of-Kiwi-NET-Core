@@ -1,4 +1,6 @@
-﻿namespace LabOfKiwi.Html;
+﻿using System;
+
+namespace LabOfKiwi.Html;
 
 public sealed class RawText : Element
 {
@@ -19,8 +21,13 @@ public sealed class RawText : Element
         return this;
     }
 
-    public override string ToString()
+    public override string ToFormattedString(int tabCount, HtmlFormatOptions formatOptions)
     {
-        return _text;
+        if (tabCount < 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(tabCount));
+        }
+
+        return formatOptions.GetTab(tabCount) + _text + formatOptions.GetNewLine();
     }
 }

@@ -1,8 +1,8 @@
 ﻿namespace LabOfKiwi.Html.Tags.Attributes;
 
-public abstract class Attribute
+internal abstract class Attribute
 {
-    internal Attribute(string name, AttributeCollection attributes)
+    protected Attribute(string name, AttributeCollection attributes)
     {
         Attributes = attributes;
         Name = name;

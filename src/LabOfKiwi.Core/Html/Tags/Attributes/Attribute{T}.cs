@@ -4,9 +4,9 @@ using System.Web;
 
 namespace LabOfKiwi.Html.Tags.Attributes;
 
-public abstract class Attribute<TValue> : Attribute
+internal abstract class Attribute<TValue> : Attribute
 {
-    internal Attribute(string name, AttributeCollection attributes, bool requiresEncoding) : base(name, attributes)
+    protected Attribute(string name, AttributeCollection attributes, bool requiresEncoding) : base(name, attributes)
     {
         RequiresEncoding = requiresEncoding;
     }

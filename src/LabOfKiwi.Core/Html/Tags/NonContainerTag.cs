@@ -8,7 +8,7 @@ public abstract class NonContainerTag : Tag
     {
     }
 
-    internal sealed override void CompleteToString(StringBuilder sb)
+    internal override void CompleteToString(StringBuilder sb, int tabCount, HtmlFormatOptions formatOptions)
     {
         sb.Append(" />");
     }

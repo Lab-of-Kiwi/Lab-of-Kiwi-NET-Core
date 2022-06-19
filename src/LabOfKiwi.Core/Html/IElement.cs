@@ -11,6 +11,8 @@ public interface IElement
     IContainerElement? Parent { get; internal set; }
 
     IEnumerable<IElement> Siblings { get; }
+
+    string ToFormattedString(int tabCount = 0, HtmlFormatOptions formatOptions = HtmlFormatOptions.None);
 }
 
 public interface IContainerElement : IElement, IList

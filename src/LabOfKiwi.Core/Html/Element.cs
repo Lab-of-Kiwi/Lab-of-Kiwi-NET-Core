@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace LabOfKiwi.Html;
 
@@ -51,5 +52,12 @@ public abstract class Element : IElement
     {
         get => Parent;
         set => Parent = value;
+    }
+
+    public abstract string ToFormattedString(int tabCount = 0, HtmlFormatOptions formatOptions = HtmlFormatOptions.None);
+
+    public sealed override string ToString()
+    {
+        return ToFormattedString(0, HtmlFormatOptions.None);
     }
 }

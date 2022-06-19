@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace LabOfKiwi.Html.Tags;
 
@@ -22,7 +20,31 @@ public class Html : Tag, IFixedContainerElement<Tag>
 
     public Body Body { get; }
 
-    public Tag this[int index]
+    protected override string TagName => "html";
+
+    internal override void CompleteToString(StringBuilder sb)
+    {
+        sb.Append('>').Append(Head.ToString()).Append(Body.ToString()).Append("</html>");
+    }
+
+    #region Explicit Interface Implementations
+    object? IList.this[int index]
+    {
+        get
+        {
+            if (index == 0) return Head;
+            if (index == 1) return Body;
+
+            throw new IndexOutOfRangeException();
+        }
+
+        set
+        {
+            throw new InvalidOperationException();
+        }
+    }
+
+    Tag IReadOnlyList<Tag>.this[int index]
     {
         get
         {
@@ -33,7 +55,7 @@ public class Html : Tag, IFixedContainerElement<Tag>
         }
     }
 
-    public IEnumerable<Tag> Children
+    IEnumerable<IElement> IContainerElement.Children
     {
         get
         {
@@ -42,29 +64,88 @@ public class Html : Tag, IFixedContainerElement<Tag>
         }
     }
 
-    public bool IsFixedSize => throw new NotImplementedException();
+    IEnumerable<Tag> IFixedContainerElement<Tag>.Children
+    {
+        get
+        {
+            yield return Head;
+            yield return Body;
+        }
+    }
 
-    public bool IsReadOnly => throw new NotImplementedException();
+    int ICollection.Count => 2;
 
-    public int Count => throw new NotImplementedException();
+    int IReadOnlyCollection<Tag>.Count => 2;
 
-    public bool IsSynchronized => throw new NotImplementedException();
+    bool IList.IsFixedSize => true;
 
-    public object SyncRoot => throw new NotImplementedException();
+    bool IList.IsReadOnly => true;
 
-    protected override string TagName => throw new NotImplementedException();
+    bool ICollection.IsSynchronized => false;
 
-    IEnumerable<IElement> IContainerElement.Children => throw new NotImplementedException();
+    object ICollection.SyncRoot => this;
 
-    public int Add(object? value) => throw new NotImplementedException();
-    public void Clear() => throw new NotImplementedException();
-    public bool Contains(object? value) => throw new NotImplementedException();
-    public void CopyTo(Array array, int index) => throw new NotImplementedException();
-    public IEnumerator<Tag> GetEnumerator() => throw new NotImplementedException();
-    public int IndexOf(object? value) => throw new NotImplementedException();
-    public void Insert(int index, object? value) => throw new NotImplementedException();
-    public void Remove(object? value) => throw new NotImplementedException();
-    public void RemoveAt(int index) => throw new NotImplementedException();
-    internal override void CompleteToString(StringBuilder sb) => throw new NotImplementedException();
-    IEnumerator IEnumerable.GetEnumerator() => throw new NotImplementedException();
+    int IList.Add(object? value)
+    {
+        throw new InvalidOperationException();
+    }
+
+    void IList.Clear()
+    {
+        throw new InvalidOperationException();
+    }
+
+    bool IList.Contains(object? value)
+    {
+        return ReferenceEquals(Body, value) || ReferenceEquals(Head, value);
+    }
+
+    void ICollection.CopyTo(Array array, int index)
+    {
+        Tag[] arr = new Tag[] { Head, Body };
+        arr.CopyTo(array, index);
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        yield return Head;
+        yield return Body;
+    }
+
+    IEnumerator<Tag> IEnumerable<Tag>.GetEnumerator()
+    {
+        yield return Head;
+        yield return Body;
+    }
+
+    int IList.IndexOf(object? value)
+    {
+        if (ReferenceEquals(Body, value))
+        {
+            return 0;
+        }
+
+        if (ReferenceEquals(Head, value))
+        {
+            return 1;
+        }
+
+        return -1;
+    }
+
+    void IList.Insert(int index, object? value)
+    {
+        throw new InvalidOperationException();
+    }
+
+    void IList.Remove(object? value)
+    {
+        throw new InvalidOperationException();
+    }
+
+    void IList.RemoveAt(int index)
+    {
+        throw new InvalidOperationException();
+    }
+    #endregion
 }
