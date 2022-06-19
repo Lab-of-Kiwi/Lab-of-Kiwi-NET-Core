@@ -34,7 +34,7 @@ public class Option : Tag, ISelectChild
 
     protected sealed override string TagName => "option";
 
-    internal sealed override void CompleteToString(StringBuilder sb)
+    internal sealed override void CompleteToString(StringBuilder sb, int tabCount, HtmlFormatOptions formatOptions)
     {
         if (InnerText == null)
         {

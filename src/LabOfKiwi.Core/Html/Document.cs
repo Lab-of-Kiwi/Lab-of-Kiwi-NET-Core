@@ -13,7 +13,7 @@ public class Document
         StringBuilder sb = new();
         sb.Append(DocType.ToTagString());
         sb.Append(formatOptions.GetNewLine());
-        sb.Append(Html.InternalToFormattedString(0, formatOptions));
+        sb.Append(Html.ToFormattedString(0, formatOptions));
         return sb.ToString();
     }
 

@@ -22,9 +22,9 @@ public class Html : Tag, IFixedContainerElement<Tag>
 
     protected override string TagName => "html";
 
-    internal override void CompleteToString(StringBuilder sb)
+    internal override void CompleteToString(StringBuilder sb, int tabCount, HtmlFormatOptions formatOptions)
     {
-        sb.Append('>').Append(Head.ToString()).Append(Body.ToString()).Append("</html>");
+        sb.Append('>').Append(formatOptions.GetNewLine()).Append(Head.ToFormattedString(0, formatOptions)).Append(Body.ToFormattedString(0, formatOptions)).Append("</html>");
     }
 
     #region Explicit Interface Implementations
