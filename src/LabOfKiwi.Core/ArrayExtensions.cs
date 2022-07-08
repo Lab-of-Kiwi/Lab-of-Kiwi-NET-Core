@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace LabOfKiwi;
@@ -8,6 +10,16 @@ namespace LabOfKiwi;
 /// </summary>
 public static partial class ArrayExtensions
 {
+    public static bool Contains<T>(this T[] array, T item)
+    {
+        return ((IList<T>)array).Contains(item);
+    }
+
+    public static bool Contains(Array array, object? item)
+    {
+        return ((IList)array).Contains(item);
+    }
+
     /// <summary>
     /// Returns a new array that center-aligns the elements in the provided array by padding them on the left and right
     /// with a specified value, for a specified total length.
