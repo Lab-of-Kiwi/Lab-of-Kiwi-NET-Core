@@ -80,7 +80,7 @@ internal static class SandboxOptionUtility
 
         foreach (string rawValue in rawValues)
         {
-            if (_optionMap.TryGetValue(rawValue, out SandboxOption value))
+            if (_optionMap.Reverse.TryGetValue(rawValue, out SandboxOption value))
             {
                 result |= value;
             }
