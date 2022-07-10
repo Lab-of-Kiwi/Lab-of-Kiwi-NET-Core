@@ -247,7 +247,7 @@ public readonly struct TextSlice : IEquatable<TextSlice>, IReadOnlyList<char>
 
             if (isMatch)
             {
-                return i;
+                return i - _startIndex;
             }
         }
 
