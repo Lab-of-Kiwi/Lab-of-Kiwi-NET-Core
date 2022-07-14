@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Globalization;
+using System.Text;
 
 namespace LabOfKiwi;
 
@@ -58,5 +60,82 @@ public static class StringExtensions
         Debug.Assert(!ReferenceEquals(chars, result));
 
         return new string(result);
+    }
+
+    /// <summary>
+    /// Returns a string that is snake-case, i.e. words are separated with underscores, using the provided string.
+    /// </summary>
+    /// 
+    /// <param name="value">The value to be converted to snake-case.</param>
+    /// <returns>A new string in snake-case.</returns>
+    /// 
+    /// <exception cref="ArgumentNullException"><paramref name="value"/> is <c>null</c>.</exception>
+    public static string ToSnakeCase(this string value)
+    {
+        if (value == null)
+        {
+            throw new ArgumentNullException(nameof(value));
+        }
+
+        if (value.Length == 0)
+        {
+            return value;
+        }
+
+        StringBuilder builder = new(value.Length + Math.Min(2, value.Length / 5));
+        UnicodeCategory? previousCategory = null;
+
+        for (var currentIndex = 0; currentIndex < value.Length; currentIndex++)
+        {
+            var currentChar = value[currentIndex];
+
+            if (currentChar == '_')
+            {
+                builder.Append('_');
+                previousCategory = null;
+                continue;
+            }
+
+            var currentCategory = char.GetUnicodeCategory(currentChar);
+
+            switch (currentCategory)
+            {
+                case UnicodeCategory.UppercaseLetter:
+                case UnicodeCategory.TitlecaseLetter:
+                    if (previousCategory == UnicodeCategory.SpaceSeparator ||
+                        previousCategory == UnicodeCategory.LowercaseLetter ||
+                        previousCategory != UnicodeCategory.DecimalDigitNumber &&
+                        previousCategory != null &&
+                        currentIndex > 0 &&
+                        currentIndex + 1 < value.Length &&
+                        char.IsLower(value[currentIndex + 1]))
+                    {
+                        builder.Append('_');
+                    }
+
+                    currentChar = char.ToLower(currentChar);
+                    break;
+
+                case UnicodeCategory.LowercaseLetter:
+                case UnicodeCategory.DecimalDigitNumber:
+                    if (previousCategory == UnicodeCategory.SpaceSeparator)
+                    {
+                        builder.Append('_');
+                    }
+                    break;
+
+                default:
+                    if (previousCategory != null)
+                    {
+                        previousCategory = UnicodeCategory.SpaceSeparator;
+                    }
+                    continue;
+            }
+
+            builder.Append(currentChar);
+            previousCategory = currentCategory;
+        }
+
+        return builder.ToString();
     }
 }
