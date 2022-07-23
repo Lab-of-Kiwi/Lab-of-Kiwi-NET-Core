@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Runtime.CompilerServices;
 
 namespace LabOfKiwi.Collections;
 
@@ -121,6 +119,56 @@ public class ListSet<T> : IOrderedSet<T>, IList, IReadOnlySet<T>
         _items.RemoveAll(i => !other.Any(e => Comparer.Equals(i, e)));
     }
 
+    public bool IsProperSubsetOf(IEnumerable<T> other)
+    {
+        if (other == null)
+        {
+            throw new ArgumentNullException(nameof(other));
+        }
+
+        // A collection cannot be a proper subset of itself.
+        if (this == other)
+        {
+            return false;
+        }
+
+        if (other.TryGetNonEnumeratedCount(out int otherCount))
+        {
+            if (_items.Count >= otherCount)
+            {
+                return false;
+            }
+        }
+
+        var comparer = Comparer;
+        return _items.All(i => other.Any(e => comparer.Equals(i, e))) && other.Any(e => _items.Any(i => !comparer.Equals(i, e)));
+    }
+
+    public bool IsProperSupersetOf(IEnumerable<T> other)
+    {
+        if (other == null)
+        {
+            throw new ArgumentNullException(nameof(other));
+        }
+
+        // A collection cannot be a proper superset of itself.
+        if (this == other)
+        {
+            return false;
+        }
+
+        if (other.TryGetNonEnumeratedCount(out int otherCount))
+        {
+            if (_items.Count <= otherCount)
+            {
+                return false;
+            }
+        }
+
+        var comparer = Comparer;
+        return _items.All(i => other.Any(e => comparer.Equals(i, e))) && _items.Any(i => other.Any(e => !comparer.Equals(i, e)));
+    }
+
     public bool IsSubsetOf(IEnumerable<T> other)
     {
         if (other == null)
@@ -135,18 +183,14 @@ public class ListSet<T> : IOrderedSet<T>, IList, IReadOnlySet<T>
 
         if (other.TryGetNonEnumeratedCount(out int otherCount))
         {
-            if (otherCount == 0)
-            {
-                return true;
-            }
-
-            if (_items.Count < otherCount)
+            if (_items.Count > otherCount)
             {
                 return false;
             }
         }
 
-        throw new NotImplementedException();
+        var comparer = Comparer;
+        return _items.All(i => other.Any(e => comparer.Equals(i, e)));
     }
 
     public bool IsSupersetOf(IEnumerable<T> other)
@@ -174,7 +218,61 @@ public class ListSet<T> : IOrderedSet<T>, IList, IReadOnlySet<T>
             }
         }
 
-        return _items.TrueForAll(i => other.Any(e => Comparer.Equals(i, e)));
+        var comparer = Comparer;
+        return other.All(e => _items.Any(i => comparer.Equals(i, e)));
+    }
+
+    public bool Overlaps(IEnumerable<T> other)
+    {
+        if (other == null)
+        {
+            throw new ArgumentNullException(nameof(other));
+        }
+
+        if (this == other || _items.Count > 0)
+        {
+            return true;
+        }
+
+        if (_items.Count == 0)
+        {
+            return false;
+        }
+
+        if (other.TryGetNonEnumeratedCount(out int otherCount))
+        {
+            if (otherCount == 0)
+            {
+                return false;
+            }
+        }
+
+        var comparer = Comparer;
+        return _items.Any(i => other.Any(e => comparer.Equals(i, e)));
+    }
+
+    public bool SetEquals(IEnumerable<T> other)
+    {
+        if (other == null)
+        {
+            throw new ArgumentNullException(nameof(other));
+        }
+
+        if (this == other)
+        {
+            return true;
+        }
+
+        if (other.TryGetNonEnumeratedCount(out int otherCount))
+        {
+            if (_items.Count == 0 && otherCount == 0)
+            {
+                return true;
+            }
+        }
+
+        var comparer = Comparer;
+        return _items.All(i => other.Any(e => comparer.Equals(i, e))) && other.All(e => _items.Any(i => comparer.Equals(i, e)));
     }
 
     public bool Remove(T item)
