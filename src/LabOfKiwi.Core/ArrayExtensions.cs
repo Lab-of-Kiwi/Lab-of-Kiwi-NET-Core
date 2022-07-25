@@ -10,6 +10,14 @@ namespace LabOfKiwi;
 /// </summary>
 public static partial class ArrayExtensions
 {
+    public static T[] Add<T>(this T[] array, T item)
+    {
+        int index = array.Length;
+        Array.Resize(ref array, index + 1);
+        array[index] = item;
+        return array;
+    }
+
     public static bool Contains<T>(this T[] array, T item)
     {
         return ((IList<T>)array).Contains(item);
