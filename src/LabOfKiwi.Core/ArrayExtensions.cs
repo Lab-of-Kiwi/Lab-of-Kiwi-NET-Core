@@ -228,6 +228,90 @@ public static partial class ArrayExtensions
     /// Determines if two array instances are structurally identical.
     /// </summary>
     /// 
+    /// <param name="array">The first array.</param>a
+    /// <param name="other">The second array.</param>
+    /// <param name="forceReferenceMatch">Flag that requires elements to be identical references.</param>
+    /// <returns>
+    ///     <c>true</c> if both arrays are the same reference or if their sizes are identical and contains the same
+    ///     values; otherwise, <c>false</c>.
+    /// </returns>
+    /// 
+    /// <exception cref="ArgumentNullException"><paramref name="array"/> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentException"><paramref name="array"/> is not a one-dimensional array.</exception>
+    public static bool StructurallyEquals(this Array array, Array? other, bool forceReferenceMatch = false)
+    {
+        if (array == null)
+        {
+            throw new ArgumentNullException(nameof(array));
+        }
+
+        if (array.Rank != 1)
+        {
+            throw new ArgumentException("Multi-dimensional arrays are not supported.");
+        }
+
+        if (ReferenceEquals(array, other))
+        {
+            return true;
+        }
+
+        if (other == null)
+        {
+            return array.LongLength == 0;
+        }
+
+        if (other.Rank != 1)
+        {
+            return false;
+        }
+
+        if (array.LongLength != other.LongLength)
+        {
+            return false;
+        }
+
+        if (forceReferenceMatch)
+        {
+            for (long i = 0; i < array.LongLength; i++)
+            {
+                object? e1 = array.GetValue(i);
+                object? e2 = other.GetValue(i);
+
+                if (!ReferenceEquals(e1, e2))
+                {
+                    return false;
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < array.Length; i++)
+            {
+                object? e1 = array.GetValue(i);
+                object? e2 = other.GetValue(i);
+
+                if (!ReferenceEquals(e1, e2))
+                {
+                    if (e1 == null || e2 == null)
+                    {
+                        return false;
+                    }
+
+                    if (!e1.Equals(e2))
+                    {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Determines if two array instances are structurally identical.
+    /// </summary>
+    /// 
     /// <typeparam name="T">The type of elements in the arrays.</typeparam>
     /// <param name="array">The first array.</param>
     /// <param name="other">The second array.</param>
