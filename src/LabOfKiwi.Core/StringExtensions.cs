@@ -11,6 +11,270 @@ namespace LabOfKiwi;
 public static class StringExtensions
 {
     /// <summary>
+    /// Searches for a <see cref="char"/> that matches the conditions defined by the specified predicate, and returns
+    /// the zero-based index of the first occurrence within the entire <see cref="string"/>.
+    /// </summary>
+    /// 
+    /// <param name="value">The <see cref="string"/> to search.</param>
+    /// <param name="match">
+    ///     The <see cref="Predicate{T}"/> delegate that defines the conditions of the <see cref="char"/> to search for.
+    /// </param>
+    /// <returns>
+    ///     The zero-based index of the first occurrence of a <see cref="char"/> that matches the conditions defined by
+    ///     <paramref name="match"/>, if found; otherwise, -1.
+    /// </returns>
+    /// 
+    /// <exception cref="ArgumentNullException">
+    ///     <paramref name="value"/> is <c>null</c>.
+    ///     -or-
+    ///     <paramref name="match"/> is <c>null</c>.
+    /// </exception>
+    public static int FindIndex(this string value, Predicate<char> match)
+    {
+        if (value == null)
+        {
+            throw new ArgumentNullException(nameof(value));
+        }
+
+        return FindIndex(value, 0, value.Length, match);
+    }
+
+    /// <summary>
+    /// Searches for a <see cref="char"/> that matches the conditions defined by the specified predicate, and returns
+    /// the zero-based index of the first occurrence within the range of <see cref="char"/> elements in the
+    /// <see cref="string"/> that extends from the specified index to the last <see cref="char"/>.
+    /// </summary>
+    /// 
+    /// <param name="value">The <see cref="string"/> to search.</param>
+    /// <param name="startIndex">The zero-based starting index of the search.</param>
+    /// <param name="match">
+    ///     The <see cref="Predicate{T}"/> delegate that defines the conditions of the <see cref="char"/> to search for.
+    /// </param>
+    /// <returns>
+    ///     The zero-based index of the first occurrence of a <see cref="char"/> that matches the conditions defined by
+    ///     <paramref name="match"/>, if found; otherwise, -1.
+    /// </returns>
+    /// 
+    /// <exception cref="ArgumentNullException">
+    ///     <paramref name="value"/> is <c>null</c>.
+    ///     -or-
+    ///     <paramref name="match"/> is <c>null</c>.
+    /// </exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    ///     <paramref name="startIndex"/> is outside the range of valid indexes for the <see cref="string"/>.
+    /// </exception>
+    public static int FindIndex(this string value, int startIndex, Predicate<char> match)
+    {
+        if (value == null)
+        {
+            throw new ArgumentNullException(nameof(value));
+        }
+
+        return FindIndex(value, startIndex, value.Length - startIndex, match);
+    }
+
+    /// <summary>
+    /// Searches for a <see cref="char"/> that matches the conditions defined by the specified predicate, and returns
+    /// the zero-based index of the first occurrence within the range of <see cref="char"/> elements in the
+    /// <see cref="string"/> that starts at the specified index and contains the specified number of <see cref="char"/>
+    /// elements.
+    /// </summary>
+    /// 
+    /// <param name="value">The <see cref="string"/> to search.</param>
+    /// <param name="startIndex">The zero-based starting index of the search.</param>
+    /// <param name="count">The number of <see cref="char"/> elements in the section to search.</param>
+    /// <param name="match">
+    ///     The <see cref="Predicate{T}"/> delegate that defines the conditions of the <see cref="char"/> to search for.
+    /// </param>
+    /// <returns>
+    ///     The zero-based index of the first occurrence of a <see cref="char"/> that matches the conditions defined by
+    ///     <paramref name="match"/>, if found; otherwise, -1.
+    /// </returns>
+    /// 
+    /// <exception cref="ArgumentNullException">
+    ///     <paramref name="value"/> is <c>null</c>.
+    ///     -or-
+    ///     <paramref name="match"/> is <c>null</c>.
+    /// </exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    ///     <paramref name="startIndex"/> is outside the range of valid indexes for the <see cref="string"/>.
+    ///     -or-
+    ///     <paramref name="count"/> is less than 0.
+    ///     -or-
+    ///     <paramref name="startIndex"/> and <paramref name="count"/> do not specify a valid section in the
+    ///     <see cref="string"/>.
+    /// </exception>
+    public static int FindIndex(this string value, int startIndex, int count, Predicate<char> match)
+    {
+        if (value == null)
+        {
+            throw new ArgumentNullException(nameof(value));
+        }
+
+        if ((uint)startIndex > (uint)value.Length)
+        {
+            throw new ArgumentOutOfRangeException(nameof(startIndex));
+        }
+
+        if (count < 0 || startIndex > value.Length - count)
+        {
+            throw new ArgumentOutOfRangeException(nameof(count));
+        }
+
+        if (match == null)
+        {
+            throw new ArgumentNullException(nameof(match));
+        }
+
+        int endIndex = startIndex + count;
+
+        for (int i = startIndex; i < endIndex; i++)
+        {
+            if (match(value[i]))
+            {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    /// <summary>
+    /// Searches for a <see cref="char"/> that matches the conditions defined by the specified predicate, and returns
+    /// the zero-based index of the last occurrence within the entire <see cref="string"/>.
+    /// </summary>
+    /// 
+    /// <param name="value">The <see cref="string"/> to search.</param>
+    /// <param name="match">
+    ///     The <see cref="Predicate{T}"/> delegate that defines the conditions of the <see cref="char"/> to search for.
+    /// </param>
+    /// <returns>
+    ///     The zero-based index of the last occurrence of a <see cref="char"/> that matches the conditions defined by
+    ///     <paramref name="match"/>, if found; otherwise, -1.
+    /// </returns>
+    /// 
+    /// <exception cref="ArgumentNullException">
+    ///     <paramref name="value"/> is <c>null</c>.
+    ///     -or-
+    ///     <paramref name="match"/> is <c>null</c>.
+    /// </exception>
+    public static int FindLastIndex(this string value, Predicate<char> match)
+    {
+        if (value == null)
+        {
+            throw new ArgumentNullException(nameof(value));
+        }
+
+        return FindLastIndex(value, value.Length - 1, value.Length, match);
+    }
+
+    /// <summary>
+    /// Searches for a <see cref="char"/> that matches the conditions defined by the specified predicate, and returns
+    /// the zero-based index of the last occurrence within the range of <see cref="char"/> elements in the
+    /// <see cref="string"/> that extends from the first <see cref="char"/> to the specified index.
+    /// </summary>
+    /// 
+    /// <param name="value">The <see cref="string"/> to search.</param>
+    /// <param name="startIndex">The zero-based starting index of the backward search.</param>
+    /// <param name="match">
+    ///     The <see cref="Predicate{T}"/> delegate that defines the conditions of the <see cref="char"/> to search for.
+    /// </param>
+    /// <returns>
+    ///     The zero-based index of the last occurrence of a <see cref="char"/> that matches the conditions defined by
+    ///     <paramref name="match"/>, if found; otherwise, -1.
+    /// </returns>
+    /// 
+    /// <exception cref="ArgumentNullException">
+    ///     <paramref name="value"/> is <c>null</c>.
+    ///     -or-
+    ///     <paramref name="match"/> is <c>null</c>.
+    /// </exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    ///     <paramref name="startIndex"/> is outside the range of valid indexes for the <see cref="string"/>.
+    /// </exception>
+    public static int FindLastIndex(this string value, int startIndex, Predicate<char> match)
+    {
+        return FindLastIndex(value, startIndex, startIndex + 1, match);
+    }
+
+    /// <summary>
+    /// Searches for a <see cref="char"/> that matches the conditions defined by the specified predicate, and returns
+    /// the zero-based index of the last occurrence within the range of <see cref="char"/> elements in the
+    /// <see cref="string"/> that contains the specified number of <see cref="char"/> elements and ends at the specified
+    /// index.
+    /// </summary>
+    /// 
+    /// <param name="value">The <see cref="string"/> to search.</param>
+    /// <param name="startIndex">The zero-based starting index of the backward search.</param>
+    /// <param name="count">The number of <see cref="char"/> elements in the section to search.</param>
+    /// <param name="match">
+    ///     The <see cref="Predicate{T}"/> delegate that defines the conditions of the <see cref="char"/> to search for.
+    /// </param>
+    /// <returns>
+    ///     The zero-based index of the last occurrence of a <see cref="char"/> that matches the conditions defined by
+    ///     <paramref name="match"/>, if found; otherwise, -1.
+    /// </returns>
+    /// 
+    /// <exception cref="ArgumentNullException">
+    ///     <paramref name="value"/> is <c>null</c>.
+    ///     -or-
+    ///     <paramref name="match"/> is <c>null</c>.
+    /// </exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    ///     <paramref name="startIndex"/> is outside the range of valid indexes for the <see cref="string"/>.
+    ///     -or-
+    ///     <paramref name="count"/> is less than 0.
+    ///     -or-
+    ///     <paramref name="startIndex"/> and <paramref name="count"/> do not specify a valid section in the
+    ///     <see cref="string"/>.
+    /// </exception>
+    public static int FindLastIndex(this string value, int startIndex, int count, Predicate<char> match)
+    {
+        if (value == null)
+        {
+            throw new ArgumentNullException(nameof(value));
+        }
+
+        if (match == null)
+        {
+            throw new ArgumentNullException(nameof(match));
+        }
+
+        if (value.Length == 0)
+        {
+            // Special case for 0 length string
+            if (startIndex != -1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(startIndex));
+            }
+        }
+        else
+        {
+            if ((uint)startIndex >= (uint)value.Length)
+            {
+                throw new ArgumentOutOfRangeException(nameof(startIndex));
+            }
+        }
+
+        if (count < 0 || startIndex - count + 1 < 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(count));
+        }
+
+        int endIndex = startIndex - count;
+
+        for (int i = startIndex; i > endIndex; i--)
+        {
+            if (match(value[i]))
+            {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    /// <summary>
     /// Returns a new string that center-aligns the characters in the provided string by padding them on the left and
     /// right with a specified Unicode character, for a specified total length.
     /// </summary>
