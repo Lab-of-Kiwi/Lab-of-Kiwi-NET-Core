@@ -100,6 +100,11 @@ public readonly struct UFixed8 : IComparable<UFixed8>, IComparable, IEquatable<U
     public static explicit operator UFixed8(ulong v)  => new((uint)(v << BitShift));
     #endregion
 
+    #region Cast from Floating-Point Types Operators
+    public static explicit operator UFixed8(float v)  => new((uint)(v * Converter));
+    public static explicit operator UFixed8(double v) => new((uint)(v * Converter));
+    #endregion
+
     #region Misc Casts
     public static explicit operator UFixed8(Fixed8 v)   => new((uint)v._value);
     public static explicit operator UFixed8(Fixed16 v)  => new((uint)v._value << 8);

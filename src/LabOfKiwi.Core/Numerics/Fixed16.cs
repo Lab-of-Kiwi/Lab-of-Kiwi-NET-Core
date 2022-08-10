@@ -100,6 +100,11 @@ public readonly struct Fixed16 : IComparable<Fixed16>, IComparable, IEquatable<F
     public static explicit operator Fixed16(ulong v)  => new((int)(v << BitShift));
     #endregion
 
+    #region Cast from Floating-Point Types Operators
+    public static explicit operator Fixed16(float v) => new((int)(v * Converter));
+    public static explicit operator Fixed16(double v) => new((int)(v * Converter));
+    #endregion
+
     #region Misc Casts
     public static explicit operator Fixed16(Fixed8 v)   => new(v._value >> 8);
     public static explicit operator Fixed16(UFixed7 v)  => new((int)(v._value >> 9));
