@@ -68,15 +68,15 @@ public readonly struct UFixed8 : IComparable<UFixed8>, IComparable, IEquatable<U
     #endregion
 
     #region Cast to Signed Integer Types Operators
-    public static explicit operator sbyte (UFixed8 v) => unchecked((sbyte)v.IntegralPart);
-    public static explicit operator short (UFixed8 v) => unchecked((short)v.IntegralPart);
-    public static explicit operator int   (UFixed8 v) => unchecked((int)v.IntegralPart);
+    public static explicit operator sbyte (UFixed8 v) => (sbyte)v.IntegralPart;
+    public static explicit operator short (UFixed8 v) => (short)v.IntegralPart;
+    public static explicit operator int   (UFixed8 v) => (int)v.IntegralPart;
     public static explicit operator long  (UFixed8 v) => v.IntegralPart;
     #endregion
 
     #region Cast to Unsigned Integer Types Operators
-    public static explicit operator byte   (UFixed8 v) => unchecked((byte)v.IntegralPart);
-    public static explicit operator ushort (UFixed8 v) => unchecked((ushort)v.IntegralPart);
+    public static explicit operator byte   (UFixed8 v) => (byte)v.IntegralPart;
+    public static explicit operator ushort (UFixed8 v) => (ushort)v.IntegralPart;
     public static explicit operator uint   (UFixed8 v) => v.IntegralPart;
     public static explicit operator ulong  (UFixed8 v) => v.IntegralPart;
     #endregion
@@ -102,7 +102,7 @@ public readonly struct UFixed8 : IComparable<UFixed8>, IComparable, IEquatable<U
 
     #region Cast from Floating-Point Types Operators
     public static explicit operator UFixed8(float v)  => new((uint)(v * Converter));
-    public static explicit operator UFixed8(double v) => new((uint)(v * Converter));
+    public static implicit operator UFixed8(double v) => new((uint)(v * Converter));
     #endregion
 
     #region Misc Casts
@@ -149,6 +149,19 @@ public readonly struct UFixed8 : IComparable<UFixed8>, IComparable, IEquatable<U
     public static UFixed8 operator -(UFixed8 left, UFixed8 right)
     {
         return new UFixed8(left._value - right._value);
+    }
+
+    // Unary Negate
+    public static DoubleFixed16 operator -(UFixed8 v)
+    {
+        long value = -v._value;
+        return new DoubleFixed16(value << 24);
+    }
+
+    // Unary Positive
+    public static UFixed8 operator +(UFixed8 v)
+    {
+        return v;
     }
     #endregion
 

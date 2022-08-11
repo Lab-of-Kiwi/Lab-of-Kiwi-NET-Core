@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Numerics;
 
 namespace LabOfKiwi.Numerics;
 
@@ -65,6 +66,8 @@ public readonly struct Fixed16 : IComparable<Fixed16>, IComparable, IEquatable<F
 
     #region Non-Public Members
     private int IntegralPart => _value >> BitShift;
+
+    internal bool IsNegative => BitOperations.LeadingZeroCount((uint)_value) == 0;
     #endregion
 
     #region Cast to Signed Integer Types Operators
@@ -87,8 +90,8 @@ public readonly struct Fixed16 : IComparable<Fixed16>, IComparable, IEquatable<F
     #endregion
 
     #region Cast from Signed Integer Types Operators
-    public static explicit operator Fixed16(sbyte v) => new(v << BitShift);
-    public static explicit operator Fixed16(short v) => new(v << BitShift);
+    public static implicit operator Fixed16(sbyte v) => new(v << BitShift);
+    public static implicit operator Fixed16(short v) => new(v << BitShift);
     public static implicit operator Fixed16(int v)   => new(v << BitShift);
     public static explicit operator Fixed16(long v)  => new((int)(v << BitShift));
     #endregion
@@ -101,8 +104,8 @@ public readonly struct Fixed16 : IComparable<Fixed16>, IComparable, IEquatable<F
     #endregion
 
     #region Cast from Floating-Point Types Operators
-    public static explicit operator Fixed16(float v) => new((int)(v * Converter));
-    public static explicit operator Fixed16(double v) => new((int)(v * Converter));
+    public static explicit operator Fixed16(float v)  => new((int)(v * Converter));
+    public static implicit operator Fixed16(double v) => new((int)(v * Converter));
     #endregion
 
     #region Misc Casts

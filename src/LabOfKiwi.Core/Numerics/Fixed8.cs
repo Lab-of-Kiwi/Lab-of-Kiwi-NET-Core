@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Numerics;
 
 namespace LabOfKiwi.Numerics;
 
@@ -65,6 +66,8 @@ public readonly struct Fixed8 : IComparable<Fixed8>, IComparable, IEquatable<Fix
 
     #region Non-Public Members
     private int IntegralPart => _value >> BitShift;
+
+    internal bool IsNegative => BitOperations.LeadingZeroCount((uint)_value) == 0;
     #endregion
 
     #region Cast to Signed Integer Types Operators
@@ -87,14 +90,14 @@ public readonly struct Fixed8 : IComparable<Fixed8>, IComparable, IEquatable<Fix
     #endregion
 
     #region Cast from Signed Integer Types Operators
-    public static explicit operator Fixed8(sbyte v) => new(v << BitShift);
+    public static implicit operator Fixed8(sbyte v) => new(v << BitShift);
     public static explicit operator Fixed8(short v) => new(v << BitShift);
     public static implicit operator Fixed8(int v)   => new(v << BitShift);
     public static explicit operator Fixed8(long v)  => new((int)(v << BitShift));
     #endregion
 
     #region Cast from Unsigned Integer Types Operators
-    public static implicit operator Fixed8(byte v)   => new(v << BitShift);
+    public static explicit operator Fixed8(byte v)   => new(v << BitShift);
     public static explicit operator Fixed8(ushort v) => new(v << BitShift);
     public static explicit operator Fixed8(uint v)   => new((int)(v << BitShift));
     public static explicit operator Fixed8(ulong v)  => new((int)(v << BitShift));
@@ -102,7 +105,7 @@ public readonly struct Fixed8 : IComparable<Fixed8>, IComparable, IEquatable<Fix
 
     #region Cast from Floating-Point Types Operators
     public static explicit operator Fixed8(float v) =>  new((int)(v * Converter));
-    public static explicit operator Fixed8(double v) => new((int)(v * Converter));
+    public static implicit operator Fixed8(double v) => new((int)(v * Converter));
     #endregion
 
     #region Misc Casts

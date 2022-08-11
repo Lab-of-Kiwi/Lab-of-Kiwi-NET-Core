@@ -68,15 +68,15 @@ public readonly struct UFixed16 : IComparable<UFixed16>, IComparable, IEquatable
     #endregion
 
     #region Cast to Signed Integer Types Operators
-    public static explicit operator sbyte (UFixed16 v) => unchecked((sbyte)v.IntegralPart);
-    public static explicit operator short (UFixed16 v) => unchecked((short)v.IntegralPart);
-    public static explicit operator int   (UFixed16 v) => unchecked((int)v.IntegralPart);
+    public static explicit operator sbyte (UFixed16 v) => (sbyte)v.IntegralPart;
+    public static explicit operator short (UFixed16 v) => (short)v.IntegralPart;
+    public static explicit operator int   (UFixed16 v) => (int)v.IntegralPart;
     public static explicit operator long  (UFixed16 v) => v.IntegralPart;
     #endregion
 
     #region Cast to Unsigned Integer Types Operators
-    public static explicit operator byte   (UFixed16 v) => unchecked((byte)v.IntegralPart);
-    public static explicit operator ushort (UFixed16 v) => unchecked((ushort)v.IntegralPart);
+    public static explicit operator byte   (UFixed16 v) => (byte)v.IntegralPart;
+    public static explicit operator ushort (UFixed16 v) => (ushort)v.IntegralPart;
     public static explicit operator uint   (UFixed16 v) => v.IntegralPart;
     public static explicit operator ulong  (UFixed16 v) => v.IntegralPart;
     #endregion
@@ -95,14 +95,14 @@ public readonly struct UFixed16 : IComparable<UFixed16>, IComparable, IEquatable
 
     #region Cast from Unsigned Integer Types Operators
     public static implicit operator UFixed16(byte v)   => new((uint)(v << BitShift));
-    public static explicit operator UFixed16(ushort v) => new((uint)(v << BitShift));
+    public static implicit operator UFixed16(ushort v) => new((uint)(v << BitShift));
     public static explicit operator UFixed16(uint v)   => new(v << BitShift);
     public static explicit operator UFixed16(ulong v)  => new((uint)(v << BitShift));
     #endregion
 
     #region Cast from Floating-Point Types Operators
     public static explicit operator UFixed16(float v)  => new((uint)(v * Converter));
-    public static explicit operator UFixed16(double v) => new((uint)(v * Converter));
+    public static implicit operator UFixed16(double v) => new((uint)(v * Converter));
     #endregion
 
     #region Misc Casts
