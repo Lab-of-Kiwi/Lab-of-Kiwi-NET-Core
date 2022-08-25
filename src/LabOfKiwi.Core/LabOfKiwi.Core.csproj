@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>LabOfKiwi</RootNamespace>
-	<Nullable>enable</Nullable>
+	  <Nullable>enable</Nullable>
   </PropertyGroup>
 
 </Project>
