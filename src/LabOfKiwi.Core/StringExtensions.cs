@@ -327,6 +327,31 @@ public static class StringExtensions
     }
 
     /// <summary>
+    /// Returns a string that has the same characters as the input string, but with order reversed.
+    /// </summary>
+    /// 
+    /// <param name="value">The value to be reversed.</param>
+    /// <returns>A new string with <paramref name="value"/> characters in reverse order.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="value"/> is <c>null</c>.</exception>
+    public static string Reverse(this string value)
+    {
+        if (value == null)
+        {
+            throw new ArgumentNullException(nameof(value));
+        }
+
+        if (value.Length < 2)
+        {
+            return value;
+        }
+
+        char[] arr = value.ToCharArray();
+        Array.Reverse(arr);
+
+        return new string(arr);
+    }
+
+    /// <summary>
     /// Returns a string that is snake-case, i.e. words are separated with underscores, using the provided string.
     /// </summary>
     /// 
