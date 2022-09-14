@@ -11,10 +11,17 @@ public readonly struct UFixed7 : IComparable<UFixed7>, IComparable, IEquatable<U
     private const int  BitShift  = 25;
     private const uint Converter = 1U << BitShift;
 
+    /// <summary>
+    /// Maximum <see cref="UFixed7"/> value: <c>127.9999999701976776123046875</c>
+    /// </summary>
     public static readonly UFixed7 MaxValue = new(uint.MaxValue);
+
+    /// <summary>
+    /// Minimum <see cref="UFixed7"/> value: <c>0</c>
+    /// </summary>
     public static readonly UFixed7 MinValue = new(0U);
 
-    internal readonly uint _value;
+    private readonly uint _value;
 
     private UFixed7(uint value)
     {
@@ -22,6 +29,10 @@ public readonly struct UFixed7 : IComparable<UFixed7>, IComparable, IEquatable<U
     }
 
     #region Public Members
+    public uint Bits => _value;
+
+    public int Sign => _value != 0U ? 1 : 0;
+
     public int CompareTo(object? obj)
     {
         if (obj == null)
@@ -59,31 +70,32 @@ public readonly struct UFixed7 : IComparable<UFixed7>, IComparable, IEquatable<U
 
     public override string ToString()
     {
-        return ((double)this).ToString();
+        return ((decimal)this).ToString();
     }
     #endregion
 
     #region Non-Public Members
-    private uint IntegralPart => _value >> BitShift;
+    private byte IntegralPart => (byte)(_value >> BitShift);
     #endregion
 
     #region Cast to Signed Integer Types Operators
     public static explicit operator sbyte (UFixed7 v) => (sbyte)v.IntegralPart;
-    public static explicit operator short (UFixed7 v) => (short)v.IntegralPart;
-    public static explicit operator int   (UFixed7 v) => (int)v.IntegralPart;
+    public static explicit operator short (UFixed7 v) => v.IntegralPart;
+    public static explicit operator int   (UFixed7 v) => v.IntegralPart;
     public static explicit operator long  (UFixed7 v) => v.IntegralPart;
     #endregion
 
     #region Cast to Unsigned Integer Types Operators
-    public static explicit operator byte   (UFixed7 v) => (byte)v.IntegralPart;
-    public static explicit operator ushort (UFixed7 v) => (ushort)v.IntegralPart;
+    public static explicit operator byte   (UFixed7 v) => v.IntegralPart;
+    public static explicit operator ushort (UFixed7 v) => v.IntegralPart;
     public static explicit operator uint   (UFixed7 v) => v.IntegralPart;
     public static explicit operator ulong  (UFixed7 v) => v.IntegralPart;
     #endregion
 
     #region Cast to Floating-Point Types Operators
-    public static explicit operator float  (UFixed7 v)  => v._value / (float)Converter;
-    public static explicit operator double (UFixed7 v)  => v._value / (double)Converter;
+    public static explicit operator float   (UFixed7 v) => v._value / (float)Converter;
+    public static explicit operator double  (UFixed7 v) => v._value / (double)Converter;
+    public static explicit operator decimal (UFixed7 v) => v._value / (decimal)Converter;
     #endregion
 
     #region Cast from Signed Integer Types Operators
@@ -101,15 +113,16 @@ public readonly struct UFixed7 : IComparable<UFixed7>, IComparable, IEquatable<U
     #endregion
 
     #region Cast from Floating-Point Types Operators
-    public static explicit operator UFixed7(float v)  => new((uint)(v * Converter));
-    public static implicit operator UFixed7(double v) => new((uint)(v * Converter));
+    public static explicit operator UFixed7(float v)   => new((uint)(v * Converter));
+    public static implicit operator UFixed7(double v)  => new((uint)(v * Converter));
+    public static explicit operator UFixed7(decimal v) => new((uint)(v * Converter));
     #endregion
 
     #region Misc Casts
-    public static explicit operator UFixed7(Fixed8 v)   => new((uint)v._value << 1);
-    public static explicit operator UFixed7(Fixed16 v)  => new((uint)v._value << 9);
-    public static explicit operator UFixed7(UFixed8 v)  => new(v._value << 1);
-    public static explicit operator UFixed7(UFixed16 v) => new(v._value << 9);
+    public static explicit operator UFixed7(Fixed8 v)   => new(v.Bits << 1);
+    public static explicit operator UFixed7(Fixed16 v)  => new(v.Bits << 9);
+    public static explicit operator UFixed7(UFixed8 v)  => new(v.Bits << 1);
+    public static explicit operator UFixed7(UFixed16 v) => new(v.Bits << 9);
     #endregion
 
     #region Arithmetic Operators

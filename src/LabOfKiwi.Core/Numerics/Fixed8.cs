@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Numerics;
 
 namespace LabOfKiwi.Numerics;
 
@@ -12,10 +11,17 @@ public readonly struct Fixed8 : IComparable<Fixed8>, IComparable, IEquatable<Fix
     private const int BitShift  = 24;
     private const int Converter = 1 << BitShift;
 
+    /// <summary>
+    /// Maximum <see cref="Fixed8"/> value: <c>127.999999940395355224609375</c>
+    /// </summary>
     public static readonly Fixed8 MaxValue = new(int.MaxValue);
+
+    /// <summary>
+    /// Minimum <see cref="Fixed8"/> value: <c>-128</c>
+    /// </summary>
     public static readonly Fixed8 MinValue = new(int.MinValue);
 
-    internal readonly int _value;
+    private readonly int _value;
 
     private Fixed8(int value)
     {
@@ -23,6 +29,10 @@ public readonly struct Fixed8 : IComparable<Fixed8>, IComparable, IEquatable<Fix
     }
 
     #region Public Members
+    public uint Bits => (uint)_value;
+
+    public int Sign => Math.Sign(_value);
+
     public int CompareTo(object? obj)
     {
         if (obj == null)
@@ -60,19 +70,17 @@ public readonly struct Fixed8 : IComparable<Fixed8>, IComparable, IEquatable<Fix
 
     public override string ToString()
     {
-        return ((double)this).ToString();
+        return ((decimal)this).ToString();
     }
     #endregion
 
     #region Non-Public Members
-    private int IntegralPart => _value >> BitShift;
-
-    internal bool IsNegative => BitOperations.LeadingZeroCount((uint)_value) == 0;
+    private sbyte IntegralPart => (sbyte)(_value >> BitShift);
     #endregion
 
     #region Cast to Signed Integer Types Operators
-    public static explicit operator sbyte (Fixed8 v) => (sbyte)v.IntegralPart;
-    public static explicit operator short (Fixed8 v) => (short)v.IntegralPart;
+    public static explicit operator sbyte (Fixed8 v) => v.IntegralPart;
+    public static explicit operator short (Fixed8 v) => v.IntegralPart;
     public static explicit operator int   (Fixed8 v) => v.IntegralPart;
     public static explicit operator long  (Fixed8 v) => v.IntegralPart;
     #endregion
@@ -85,8 +93,9 @@ public readonly struct Fixed8 : IComparable<Fixed8>, IComparable, IEquatable<Fix
     #endregion
 
     #region Cast to Floating-Point Types Operators
-    public static explicit operator float  (Fixed8 v)  => v._value / (float)Converter;
-    public static explicit operator double (Fixed8 v)  => v._value / (double)Converter;
+    public static explicit operator float   (Fixed8 v) => v._value / (float)Converter;
+    public static explicit operator double  (Fixed8 v) => v._value / (double)Converter;
+    public static explicit operator decimal (Fixed8 v) => v._value / (decimal)Converter;
     #endregion
 
     #region Cast from Signed Integer Types Operators
@@ -104,15 +113,16 @@ public readonly struct Fixed8 : IComparable<Fixed8>, IComparable, IEquatable<Fix
     #endregion
 
     #region Cast from Floating-Point Types Operators
-    public static explicit operator Fixed8(float v) =>  new((int)(v * Converter));
-    public static implicit operator Fixed8(double v) => new((int)(v * Converter));
+    public static explicit operator Fixed8(float v)   => new((int)(v * Converter));
+    public static implicit operator Fixed8(double v)  => new((int)(v * Converter));
+    public static explicit operator Fixed8(decimal v) => new((int)(v * Converter));
     #endregion
 
     #region Misc Casts
-    public static explicit operator Fixed8(Fixed16 v)  => new(v._value << 8);
-    public static explicit operator Fixed8(UFixed7 v)  => new((int)(v._value >> 1));
-    public static explicit operator Fixed8(UFixed8 v)  => new((int)v._value);
-    public static explicit operator Fixed8(UFixed16 v) => new((int)v._value << 8);
+    public static explicit operator Fixed8(Fixed16 v)  => new((int)v.Bits << 8);
+    public static explicit operator Fixed8(UFixed7 v)  => new((int)(v.Bits >> 1));
+    public static explicit operator Fixed8(UFixed8 v)  => new((int)v.Bits);
+    public static explicit operator Fixed8(UFixed16 v) => new((int)v.Bits << 8);
     #endregion
 
     #region Arithmetic Operators

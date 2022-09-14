@@ -5,17 +5,24 @@ using System.Numerics;
 namespace LabOfKiwi.Numerics;
 
 /// <summary>
-/// Represents a signed 32bit fixed-point number, with 8bits for the integer portion.
+/// Represents a signed 64bit fixed-point number, with 16bits for the integer portion.
 /// </summary>
 public readonly struct DoubleFixed16 : IComparable<DoubleFixed16>, IComparable, IEquatable<DoubleFixed16>
 {
     private const int  BitShift = 48;
     private const long Converter = 1L << BitShift;
 
+    /// <summary>
+    /// Maximum <see cref="DoubleFixed16"/> value: <c>32767.999999999999996447286321</c>
+    /// </summary>
     public static readonly DoubleFixed16 MaxValue = new(long.MaxValue);
+
+    /// <summary>
+    /// Minimum <see cref="DoubleFixed16"/> value: <c>-32768</c>
+    /// </summary>
     public static readonly DoubleFixed16 MinValue = new(long.MinValue);
 
-    internal readonly long _value;
+    private readonly long _value;
 
     internal DoubleFixed16(long value)
     {
@@ -23,6 +30,10 @@ public readonly struct DoubleFixed16 : IComparable<DoubleFixed16>, IComparable, 
     }
 
     #region Public Members
+    public ulong Bits => (ulong)_value;
+
+    public int Sign => Math.Sign(_value);
+
     public int CompareTo(object? obj)
     {
         if (obj == null)
@@ -60,20 +71,18 @@ public readonly struct DoubleFixed16 : IComparable<DoubleFixed16>, IComparable, 
 
     public override string ToString()
     {
-        return ((double)this).ToString();
+        return ((decimal)this).ToString();
     }
     #endregion
 
     #region Non-Public Members
-    private long IntegralPart => _value >> BitShift;
-
-    internal bool IsNegative => BitOperations.LeadingZeroCount((ulong)_value) == 0;
+    private short IntegralPart => (short)(_value >> BitShift);
     #endregion
 
     #region Cast to Signed Integer Types Operators
     public static explicit operator sbyte (DoubleFixed16 v) => (sbyte)v.IntegralPart;
-    public static explicit operator short (DoubleFixed16 v) => (short)v.IntegralPart;
-    public static explicit operator int   (DoubleFixed16 v) => (int)v.IntegralPart;
+    public static explicit operator short (DoubleFixed16 v) => v.IntegralPart;
+    public static explicit operator int   (DoubleFixed16 v) => v.IntegralPart;
     public static explicit operator long  (DoubleFixed16 v) => v.IntegralPart;
     #endregion
 
@@ -85,8 +94,9 @@ public readonly struct DoubleFixed16 : IComparable<DoubleFixed16>, IComparable, 
     #endregion
 
     #region Cast to Floating-Point Types Operators
-    public static explicit operator float  (DoubleFixed16 v) => v._value / (float)Converter;
-    public static explicit operator double (DoubleFixed16 v) => v._value / (double)Converter;
+    public static explicit operator float   (DoubleFixed16 v) => v._value / (float)Converter;
+    public static explicit operator double  (DoubleFixed16 v) => v._value / (double)Converter;
+    public static explicit operator decimal (DoubleFixed16 v) => v._value / (decimal)Converter;
     #endregion
 
     #region Cast from Signed Integer Types Operators
@@ -104,13 +114,14 @@ public readonly struct DoubleFixed16 : IComparable<DoubleFixed16>, IComparable, 
     #endregion
 
     #region Cast from Floating-Point Types Operators
-    public static explicit operator DoubleFixed16(float v)  => new((long)(v * Converter));
-    public static implicit operator DoubleFixed16(double v) => new((long)(v * Converter));
+    public static explicit operator DoubleFixed16(float v)   => new((long)(v * Converter));
+    public static implicit operator DoubleFixed16(double v)  => new((long)(v * Converter));
+    public static explicit operator DoubleFixed16(decimal v) => new((long)(v * Converter));
     #endregion
 
     #region Misc Casts
-    public static implicit operator DoubleFixed16(UFixed7 v) => new((long)v._value << 23);
-    public static implicit operator DoubleFixed16(UFixed8 v) => new((long)v._value << 24);
+    public static implicit operator DoubleFixed16(UFixed7 v) => new((long)v.Bits << 23);
+    public static implicit operator DoubleFixed16(UFixed8 v) => new((long)v.Bits << 24);
     #endregion
 
     #region Arithmetic Operators

@@ -12,10 +12,17 @@ public readonly struct UDoubleFixed16 : IComparable<UDoubleFixed16>, IComparable
     private const int   BitShift  = 48;
     private const ulong Converter = 1UL << BitShift;
 
+    /// <summary>
+    /// Maximum <see cref="UDoubleFixed16"/> value: <c>65535.999999999999996447286321</c>
+    /// </summary>
     public static readonly UDoubleFixed16 MaxValue = new(ulong.MaxValue);
+
+    /// <summary>
+    /// Minimum <see cref="UDoubleFixed16"/> value: <c>0</c>
+    /// </summary>
     public static readonly UDoubleFixed16 MinValue = new(0UL);
 
-    internal readonly ulong _value;
+    private readonly ulong _value;
 
     private UDoubleFixed16(ulong value)
     {
@@ -23,6 +30,10 @@ public readonly struct UDoubleFixed16 : IComparable<UDoubleFixed16>, IComparable
     }
 
     #region Public Members
+    public ulong Bits => _value;
+
+    public int Sign => _value != 0UL ? 1 : 0;
+
     public int CompareTo(object? obj)
     {
         if (obj == null)
@@ -60,31 +71,32 @@ public readonly struct UDoubleFixed16 : IComparable<UDoubleFixed16>, IComparable
 
     public override string ToString()
     {
-        return ((double)this).ToString();
+        return ((decimal)this).ToString();
     }
     #endregion
 
     #region Non-Public Members
-    private ulong IntegralPart => _value >> BitShift;
+    private ushort IntegralPart => (ushort)(_value >> BitShift);
     #endregion
 
     #region Cast to Signed Integer Types Operators
     public static explicit operator sbyte (UDoubleFixed16 v) => (sbyte)v.IntegralPart;
     public static explicit operator short (UDoubleFixed16 v) => (short)v.IntegralPart;
-    public static explicit operator int   (UDoubleFixed16 v) => (int)v.IntegralPart;
-    public static explicit operator long  (UDoubleFixed16 v) => (long)v.IntegralPart;
+    public static explicit operator int   (UDoubleFixed16 v) => v.IntegralPart;
+    public static explicit operator long  (UDoubleFixed16 v) => v.IntegralPart;
     #endregion
 
     #region Cast to Unsigned Integer Types Operators
     public static explicit operator byte   (UDoubleFixed16 v) => (byte)v.IntegralPart;
-    public static explicit operator ushort (UDoubleFixed16 v) => (ushort)v.IntegralPart;
-    public static explicit operator uint   (UDoubleFixed16 v) => (uint)v.IntegralPart;
+    public static explicit operator ushort (UDoubleFixed16 v) => v.IntegralPart;
+    public static explicit operator uint   (UDoubleFixed16 v) => v.IntegralPart;
     public static explicit operator ulong  (UDoubleFixed16 v) => v.IntegralPart;
     #endregion
 
     #region Cast to Floating-Point Types Operators
-    public static explicit operator float  (UDoubleFixed16 v) => v._value / (float)Converter;
-    public static explicit operator double (UDoubleFixed16 v) => v._value / (double)Converter;
+    public static explicit operator float   (UDoubleFixed16 v) => v._value / (float)Converter;
+    public static explicit operator double  (UDoubleFixed16 v) => v._value / (double)Converter;
+    public static explicit operator decimal (UDoubleFixed16 v) => v._value / (decimal)Converter;
     #endregion
 
     #region Cast from Signed Integer Types Operators
@@ -102,8 +114,9 @@ public readonly struct UDoubleFixed16 : IComparable<UDoubleFixed16>, IComparable
     #endregion
 
     #region Cast from Floating-Point Types Operators
-    public static explicit operator UDoubleFixed16(float v)  => new((ulong)(v * Converter));
-    public static implicit operator UDoubleFixed16(double v) => new((ulong)(v * Converter));
+    public static explicit operator UDoubleFixed16(float v)   => new((ulong)(v * Converter));
+    public static implicit operator UDoubleFixed16(double v)  => new((ulong)(v * Converter));
+    public static explicit operator UDoubleFixed16(decimal v) => new((ulong)(v * Converter));
     #endregion
 
     #region Arithmetic Operators

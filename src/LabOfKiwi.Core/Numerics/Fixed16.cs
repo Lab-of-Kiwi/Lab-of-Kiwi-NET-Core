@@ -12,10 +12,17 @@ public readonly struct Fixed16 : IComparable<Fixed16>, IComparable, IEquatable<F
     private const int BitShift  = 16;
     private const int Converter = 1 << BitShift;
 
+    /// <summary>
+    /// Maximum <see cref="Fixed16"/> value: <c>32767.9999847412109375</c>
+    /// </summary>
     public static readonly Fixed16 MaxValue = new(int.MaxValue);
+
+    /// <summary>
+    /// Minimum <see cref="Fixed16"/> value: <c>-32768</c>
+    /// </summary>
     public static readonly Fixed16 MinValue = new(int.MinValue);
 
-    internal readonly int _value;
+    private readonly int _value;
 
     private Fixed16(int value)
     {
@@ -23,6 +30,10 @@ public readonly struct Fixed16 : IComparable<Fixed16>, IComparable, IEquatable<F
     }
 
     #region Public Members
+    public uint Bits => (uint)_value;
+
+    public int Sign => Math.Sign(_value);
+
     public int CompareTo(object? obj)
     {
         if (obj == null)
@@ -60,19 +71,17 @@ public readonly struct Fixed16 : IComparable<Fixed16>, IComparable, IEquatable<F
 
     public override string ToString()
     {
-        return ((double)this).ToString();
+        return ((decimal)this).ToString();
     }
     #endregion
 
     #region Non-Public Members
-    private int IntegralPart => _value >> BitShift;
-
-    internal bool IsNegative => BitOperations.LeadingZeroCount((uint)_value) == 0;
+    private short IntegralPart => (short)(_value >> BitShift);
     #endregion
 
     #region Cast to Signed Integer Types Operators
     public static explicit operator sbyte (Fixed16 v) => (sbyte)v.IntegralPart;
-    public static explicit operator short (Fixed16 v) => (short)v.IntegralPart;
+    public static explicit operator short (Fixed16 v) => v.IntegralPart;
     public static explicit operator int   (Fixed16 v) => v.IntegralPart;
     public static explicit operator long  (Fixed16 v) => v.IntegralPart;
     #endregion
@@ -85,8 +94,9 @@ public readonly struct Fixed16 : IComparable<Fixed16>, IComparable, IEquatable<F
     #endregion
 
     #region Cast to Floating-Point Types Operators
-    public static explicit operator float  (Fixed16 v)  => v._value / (float)Converter;
-    public static explicit operator double (Fixed16 v)  => v._value / (double)Converter;
+    public static explicit operator float   (Fixed16 v) => v._value / (float)Converter;
+    public static explicit operator double  (Fixed16 v) => v._value / (double)Converter;
+    public static explicit operator decimal (Fixed16 v) => v._value / (decimal)Converter;
     #endregion
 
     #region Cast from Signed Integer Types Operators
@@ -104,15 +114,16 @@ public readonly struct Fixed16 : IComparable<Fixed16>, IComparable, IEquatable<F
     #endregion
 
     #region Cast from Floating-Point Types Operators
-    public static explicit operator Fixed16(float v)  => new((int)(v * Converter));
-    public static implicit operator Fixed16(double v) => new((int)(v * Converter));
+    public static explicit operator Fixed16(float v)   => new((int)(v * Converter));
+    public static implicit operator Fixed16(double v)  => new((int)(v * Converter));
+    public static explicit operator Fixed16(decimal v) => new((int)(v * Converter));
     #endregion
 
     #region Misc Casts
-    public static explicit operator Fixed16(Fixed8 v)   => new(v._value >> 8);
-    public static explicit operator Fixed16(UFixed7 v)  => new((int)(v._value >> 9));
-    public static explicit operator Fixed16(UFixed8 v)  => new((int)(v._value >> 8));
-    public static explicit operator Fixed16(UFixed16 v) => new((int)v._value);
+    public static explicit operator Fixed16(Fixed8 v)   => new((int)v.Bits >> 8);
+    public static explicit operator Fixed16(UFixed7 v)  => new((int)(v.Bits >> 9));
+    public static explicit operator Fixed16(UFixed8 v)  => new((int)(v.Bits >> 8));
+    public static explicit operator Fixed16(UFixed16 v) => new((int)v.Bits);
     #endregion
 
     #region Arithmetic Operators
