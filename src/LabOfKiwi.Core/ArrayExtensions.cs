@@ -10,21 +10,69 @@ namespace LabOfKiwi;
 /// </summary>
 public static partial class ArrayExtensions
 {
-    public static T[] Add<T>(this T[] array, T item)
+    /// <summary>
+    /// Creates a new array with the contents of the provided array with the provided item appended.
+    /// </summary>
+    /// 
+    /// <typeparam name="T">The type of elements in <paramref name="array"/>.</typeparam>
+    /// <param name="array">The array to be duplicated.</param>
+    /// <param name="item">The item to be appended.</param>
+    /// <returns>A new array.</returns>
+    /// 
+    /// <exception cref="ArgumentNullException"><paramref name="array"/> is <c>null</c>.</exception>
+    public static T[] Append<T>(this T[] array, T item)
     {
+        if (array == null)
+        {
+            throw new ArgumentNullException(nameof(array));
+        }
+
         int index = array.Length;
         Array.Resize(ref array, index + 1);
         array[index] = item;
         return array;
     }
 
+    /// <summary>
+    /// Determines whether the provided array contains a specific value.
+    /// </summary>
+    /// 
+    /// <typeparam name="T">The type of elements in <paramref name="array"/>.</typeparam>
+    /// <param name="array">The array to be searched.</param>
+    /// <param name="item">The object to locate in <paramref name="array"/>.</param>
+    /// <returns>
+    ///     <c>true</c> if <paramref name="item"/> is found in <paramref name="array"/>; otherwise, <c>false</c>.
+    /// </returns>
+    /// 
+    /// <exception cref="ArgumentNullException"><paramref name="array"/> is <c>null</c>.</exception>
     public static bool Contains<T>(this T[] array, T item)
     {
+        if (array == null)
+        {
+            throw new ArgumentNullException(nameof(array));
+        }
+
         return ((IList<T>)array).Contains(item);
     }
 
+    /// <summary>
+    /// Determines whether the provided array contains a specific value.
+    /// </summary>
+    /// 
+    /// <param name="array">The array to be searched.</param>
+    /// <param name="item">The object to locate in <paramref name="array"/>.</param>
+    /// <returns>
+    ///     <c>true</c> if <paramref name="item"/> is found in <paramref name="array"/>; otherwise, <c>false</c>.
+    /// </returns>
+    /// 
+    /// <exception cref="ArgumentNullException"><paramref name="array"/> is <c>null</c>.</exception>
     public static bool Contains(Array array, object? item)
     {
+        if (array == null)
+        {
+            throw new ArgumentNullException(nameof(array));
+        }
+
         return ((IList)array).Contains(item);
     }
 
@@ -222,6 +270,29 @@ public static partial class ArrayExtensions
         }
 
         return result;
+    }
+
+    /// <summary>
+    /// Creates a new array with the contents of the provided array with the provided item prepended.
+    /// </summary>
+    /// 
+    /// <typeparam name="T">The type of elements in <paramref name="array"/>.</typeparam>
+    /// <param name="array">The array to be duplicated.</param>
+    /// <param name="item">The item to be prepended.</param>
+    /// <returns>A new array.</returns>
+    /// 
+    /// <exception cref="ArgumentNullException"><paramref name="array"/> is <c>null</c>.</exception>
+    public static T[] Prepend<T>(this T[] array, T item)
+    {
+        if (array == null)
+        {
+            throw new ArgumentNullException(nameof(array));
+        }
+
+        T[] newArray = new T[array.Length + 1];
+        Array.Copy(array, 0, newArray, 1, array.Length);
+        newArray[0] = item;
+        return newArray;
     }
 
     /// <summary>
