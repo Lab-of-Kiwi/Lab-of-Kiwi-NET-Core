@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LabOfKiwi.Text;
+using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.Text;
@@ -426,5 +427,10 @@ public static class StringExtensions
         }
 
         return builder.ToString();
+    }
+
+    public static StringList ToStringList(this string? value)
+    {
+        return new StringList(value);
     }
 }
