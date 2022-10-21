@@ -117,13 +117,10 @@ public class ReadOnlyMap<T1, T2> : IReadOnlyMap<T1, T2>
     }
 
     #region Explicit Interface Definitions
-    /// <inheritdoc/>
     IEnumerable<T1> IReadOnlyDictionary<T1, T2>.Keys => _map.Keys;
 
-    /// <inheritdoc/>
     IEnumerable<T2> IReadOnlyDictionary<T1, T2>.Values => _map.Values;
 
-    /// <inheritdoc/>
     IEnumerator IEnumerable.GetEnumerator()
     {
         return ((IEnumerable)_map).GetEnumerator();

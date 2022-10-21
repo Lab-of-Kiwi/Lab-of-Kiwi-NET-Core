@@ -48,7 +48,7 @@ public static partial class ArrayExtensions
             }
         }
 
-        StringBuilder sb = new StringBuilder(resultLength);
+        StringBuilder sb = new(resultLength);
         string bin;
 
         if (string.IsNullOrEmpty(delimiter))
@@ -120,7 +120,7 @@ public static partial class ArrayExtensions
             resultLength += (array.Length - 1) * (delimiter?.Length ?? 0);
         }
 
-        StringBuilder sb = new StringBuilder(resultLength);
+        StringBuilder sb = new(resultLength);
         string hex;
 
         if (uppercase)

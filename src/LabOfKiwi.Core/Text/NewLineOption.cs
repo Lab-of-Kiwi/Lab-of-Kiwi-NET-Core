@@ -11,7 +11,7 @@ public enum NewlineOption : byte
     /// <summary>
     /// No newlines allowed.
     /// </summary>
-    None    = 0b00000000,
+    None = 0b00000000,
 
     /// <summary>
     /// Windows newlines only (CR LF).
@@ -21,15 +21,15 @@ public enum NewlineOption : byte
     /// <summary>
     /// Unix/Linux like system newlines only (LF).
     /// </summary>
-    Linux   = 0b00000010,
+    Linux = 0b00000010,
 
     /// <summary>
     /// Classic Mac OS and Apple newlines only (CR).
     /// </summary>
-    Mac     = 0b00000100,
+    Mac = 0b00000100,
 
     /// <summary>
     /// Any newlines allowed.
     /// </summary>
-    Any     = 0b00000111
+    Any = 0b00000111
 }

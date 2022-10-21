@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace LabOfKiwi;
 
@@ -11,9 +12,6 @@ namespace LabOfKiwi;
 /// <typeparam name="T">The type of value to cache.</typeparam>
 public sealed class CachedObject<T>
 {
-    // Thread safety lock for synchronization.
-    private readonly object _syncLock = new();
-
     // The function that supplies the value.
     private readonly Func<T> _supplier;
 
@@ -105,13 +103,8 @@ public sealed class CachedObject<T>
     /// </summary>
     public bool IsValueCreated
     {
-        get
-        {
-            lock (_syncLock)
-            {
-                return _isSet;
-            }
-        }
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        get => _isSet;
     }
 
     /// <summary>
@@ -119,13 +112,8 @@ public sealed class CachedObject<T>
     /// </summary>
     public bool IsValueFaulted
     {
-        get
-        {
-            lock (_syncLock)
-            {
-                return _isSet && _exception != null;
-            }
-        }
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        get => _isSet && _exception != null;
     }
 
     /// <summary>
@@ -138,17 +126,15 @@ public sealed class CachedObject<T>
     /// </summary>
     public long RemainingCachedAccessCount
     {
+        [MethodImpl(MethodImplOptions.Synchronized)]
         get
         {
-            lock (_syncLock)
+            if (_isSet && _cachedAccessCount < _maxCachedAccessCount && DateTime.Now - _setAt < _timeout)
             {
-                if (_isSet && _cachedAccessCount < _maxCachedAccessCount && DateTime.Now - _setAt < _timeout)
-                {
-                    return _maxCachedAccessCount - _cachedAccessCount;
-                }
-
-                return 0L;
+                return _maxCachedAccessCount - _cachedAccessCount;
             }
+
+            return 0L;
         }
     }
 
@@ -162,22 +148,20 @@ public sealed class CachedObject<T>
     /// </summary>
     public TimeSpan TimeRemaining
     {
+        [MethodImpl(MethodImplOptions.Synchronized)]
         get
         {
-            lock (_syncLock)
+            if (_isSet && _cachedAccessCount < _maxCachedAccessCount)
             {
-                if (_isSet && _cachedAccessCount < _maxCachedAccessCount)
+                var elapsedTime = DateTime.Now - _setAt;
+
+                if (elapsedTime < _timeout)
                 {
-                    var elapsedTime = DateTime.Now - _setAt;
-
-                    if (elapsedTime < _timeout)
-                    {
-                        return _timeout - elapsedTime;
-                    }
+                    return _timeout - elapsedTime;
                 }
-
-                return TimeSpan.Zero;
             }
+
+            return TimeSpan.Zero;
         }
     }
 
@@ -187,56 +171,52 @@ public sealed class CachedObject<T>
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     public T Value
     {
+        [MethodImpl(MethodImplOptions.Synchronized)]
         get
         {
-            lock (_syncLock)
+            if (_isSet && _cachedAccessCount < _maxCachedAccessCount && DateTime.Now - _setAt < _timeout)
             {
-                if (_isSet && _cachedAccessCount < _maxCachedAccessCount && DateTime.Now - _setAt < _timeout)
-                {
-                    _cachedAccessCount++;
+                _cachedAccessCount++;
 
-                    if (_exception != null)
-                    {
-                        throw _exception;
-                    }
-
-                    return _value;
-                }
-
-                try
+                if (_exception != null)
                 {
-                    _value = _supplier();
-                    _exception = null;
-                }
-                catch (Exception e)
-                {
-                    _exception = e;
-                    throw;
-                }
-                finally
-                {
-                    _setAt = DateTime.Now;
-                    _isSet = true;
-                    _cachedAccessCount = 0L;
+                    throw _exception;
                 }
 
                 return _value;
             }
+
+            try
+            {
+                _value = _supplier();
+                _exception = null;
+            }
+            catch (Exception e)
+            {
+                _exception = e;
+                throw;
+            }
+            finally
+            {
+                _setAt = DateTime.Now;
+                _isSet = true;
+                _cachedAccessCount = 0L;
+            }
+
+            return _value;
         }
     }
 
     /// <summary>
     /// Clears the state of this instance, forcing the next call to <see cref="Value"/> to re-create the value.
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Reset()
     {
-        lock (_syncLock)
-        {
-            _isSet = false;
-            _setAt = default;
-            _cachedAccessCount = -1L;
-            _exception = null;
-            _value = default!;
-        }
+        _isSet = false;
+        _setAt = default;
+        _cachedAccessCount = -1L;
+        _exception = null;
+        _value = default!;
     }
 }

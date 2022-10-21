@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace LabOfKiwi.Linq;
@@ -103,25 +104,12 @@ public static class EnumerableExtensions
             throw new ArgumentNullException(nameof(source));
         }
 
-        int count = source.Count();
-
-        if (count == 0)
+        if (TryRandom(source, out TSource? result))
         {
-            throw new InvalidOperationException("Sequence contains no elements.");
+            return result;
         }
 
-        var random = new Random();
-        int index = random.Next(0, count);
-
-        try
-        {
-            return source.ElementAt(index);
-        }
-        catch
-        {
-            // In case collection is modified between count check.
-            throw new InvalidOperationException("Sequence contains no elements.");
-        }
+        throw new InvalidOperationException("Sequence contains no elements.");
     }
 
     /// <summary>
@@ -143,24 +131,39 @@ public static class EnumerableExtensions
             throw new ArgumentNullException(nameof(source));
         }
 
-        int count = source.Count();
-
-        if (count == 0)
+        if (TryRandom(source, out TSource? result))
         {
-            return default;
+            return result;
         }
 
+        return default;
+    }
+
+    private static bool TryRandom<TSource>(IEnumerable<TSource> source, [MaybeNullWhen(false)] out TSource result)
+    {
         var random = new Random();
-        int index = random.Next(0, count);
 
-        try
+        while (true)
         {
-            return source.ElementAt(index);
-        }
-        catch
-        {
-            // In case collection is modified between count check.
-            return default;
+            int count = source.Count();
+
+            if (count == 0)
+            {
+                result = default;
+                return false;
+            }
+            
+            int index = random.Next(0, count);
+
+            try
+            {
+                result = source.ElementAt(index);
+                return true;
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                // Source collection was modified.
+            }
         }
     }
 
